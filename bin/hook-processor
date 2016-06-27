@@ -1,7 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-use Bitban\GitHooks\Command\CheckHooksCommand;
+use Bitban\GitHooks\Command\CheckCommand;
+use Bitban\GitHooks\Command\InstallCommand;
 use Bitban\GitHooks\Command\PostCheckoutCommand;
 use Bitban\GitHooks\Command\PostMergeCommand;
 use Bitban\GitHooks\Command\PreCommitCommand;
@@ -23,7 +24,8 @@ $name    = 'Git Hooks Command Line Tool';
 $version = '0.9.0';
 $console = new Application($name, $version);
 $console->addCommands([
-    new CheckHooksCommand(),
+    new CheckCommand(),
+    new InstallCommand(),
     new PostCheckoutCommand(),
     new PostMergeCommand(),
     new PreCommitCommand()

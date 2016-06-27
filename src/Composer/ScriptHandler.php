@@ -9,6 +9,7 @@ namespace Bitban\GitHooks\Composer;
 
 
 use Composer\Script\Event;
+use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
@@ -19,30 +20,40 @@ class ScriptHandler
      */
     public static function checkHooks(Event $event)
     {
+        // bin/hook-processor check <sourcePath> <destinationPath> <projectPath>
+
         $options = self::getOptions($event);
 
+        $cmd = 'check';
         $projectPath = realpath($event->getComposer()->getConfig()->get('vendor-dir') . '/../');
-        $libraryPath = realpath(__DIR__ . '/../..');
+        $sourcePath = realpath(__DIR__ . '/../../hooks');
+        $destinationPath = realpath($projectPath . '/.git/hooks');
+        if (!$destinationPath) {
+            mkdir($projectPath . '/.git/hooks');
+            $destinationPath = realpath($projectPath . '/.git/hooks');
+        }
 
-        $cmd = 'hook:check-hooks';
+        if (!$destinationPath) {
+            $event->stopPropagation();
+            throw new RuntimeException("Destination path does not exist.");
+        }
+
         $timeout = $options['process-timeout'];
 
         $php = escapeshellarg(static::getPhp(false));
         $phpArgs = implode(' ', array_map('escapeshellarg', static::getPhpArguments()));
-        $console = escapeshellarg('bin/hook-processor');
+        $console = escapeshellarg($projectPath . '/bin/hook-processor');
         if ($event->getIO()->isDecorated()) {
             $console .= ' --ansi';
         }
 
-        $command = join(' ', [$console, $cmd, $projectPath, $libraryPath]);
+        $command = join(' ', [$console, $cmd, $sourcePath, $destinationPath, $projectPath]);
         $process = new Process($php . ($phpArgs ? ' ' . $phpArgs : '') . ' ' . $command, null, null, null, $timeout);
         $process->run(function ($type, $buffer) use ($event) {
             $event->getIO()->write($buffer, false);
         });
         if (!$process->isSuccessful()) {
             $event->stopPropagation();
-            throw new \RuntimeException(sprintf("An error occurred when executing the \"%s\" command:\n\n%s\n\n%s.",
-                escapeshellarg($cmd), $process->getOutput(), $process->getErrorOutput()));
         }
     }
 

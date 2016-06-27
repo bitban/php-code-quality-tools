@@ -1,12 +1,15 @@
-* Single script to process all hooks
-* Symbolic link from enabled hooks to centralised script
-* Check that hooks are installed
+* <del>Single script to process all hooks</del>
+* <del>Command to install hooks (copy rather than symlink)</del>
+* <del>Check that hooks are installed</del>
 * post-merge script
-  * composer install
+  * composer install (refactor)
 * post-checkout script
-  * composer install
+  * composer install (refactor)
 * pre-commit script
   * linter
+    * Errors: var_dump()
+    * Warnings: empty()
+  * composer.json + composer.lock pack
   * php-cs
   * php-cs-fixer
   * php-unit (not yet)

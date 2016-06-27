@@ -15,14 +15,18 @@ use Symfony\Component\Process\Process;
 
 class PostCheckoutCommand extends Command
 {
+    const COMMAND_NAME = 'post-checkout';
+    const COMMAN_DESCRIPTION = 'post-checkout Git hook';
+    const ARG_PROJECT_PATH = 'projectPath';
     const ARG_PREV_COMMIT = 'prevCommit';
     const ARG_POST_COMMIT = 'postCommit';
          
     protected function configure()
     {
         $this
-            ->setName('hook:post-checkout')
-            ->setDescription('post-checkout hook')
+            ->setName(self::COMMAND_NAME)
+            ->setDescription(self::COMMAN_DESCRIPTION)
+            ->addArgument(self::ARG_PROJECT_PATH)
             ->addArgument(self::ARG_PREV_COMMIT)
             ->addArgument(self::ARG_POST_COMMIT);
     }
@@ -31,9 +35,13 @@ class PostCheckoutCommand extends Command
     {
         $output->writeln('<info>Running post-checkout hook</info>');
         
-        $projectPath = realpath(__DIR__ . '/../../');
+        $projectPath = realpath($input->getArgument(self::ARG_PROJECT_PATH));
         $prevCommit = $input->getArgument(self::ARG_PREV_COMMIT);
         $postCommit = $input->getArgument(self::ARG_POST_COMMIT);
+
+        if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+            $output->writeln('<info>Project path: ' . $projectPath . '</info>');
+        }
         
         chdir($projectPath);
         if (file_exists($projectPath . '/composer.lock')) {
@@ -53,7 +61,7 @@ class PostCheckoutCommand extends Command
                 $process = new Process($composerCommand);
                 $process->run();
                 $output->writeln('<info>' . $process->getOutput() . '</info>');
-                $output->writeln('<error>' . $process->getErrorOutput() . '</error>');
+                $output->writeln('<info>' . $process->getErrorOutput() . '</info>');
             }
         }
     }

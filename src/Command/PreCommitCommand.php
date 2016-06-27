@@ -14,10 +14,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class PreCommitCommand extends Command
 {
+    const COMMAND_NAME = 'pre-commit';
+    const COMMAND_DESCRIPTION = 'pre-commit Git hook';
+    
     protected function configure()
     {
-        $this->setName('hook:pre-commit');
-        $this->setDescription('pre-commit hook');
+        $this->setName(self::COMMAND_NAME);
+        $this->setDescription(self::COMMAND_DESCRIPTION);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
