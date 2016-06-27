@@ -1,0 +1,44 @@
+{
+  "name": "bitban/git-hooks",
+  "description": "Git hooks for Bitban projects.",
+  "license": "MIT",
+  "keywords": [
+    "git",
+    "hook",
+    "quality"
+  ],
+  "authors": [
+    {
+      "name": "Fede Álvarez",
+      "email": "falvarez@bitban.com"
+    }
+  ],
+  "type": "library",
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "Bitban\\GitHooks\\": "src/"
+    }
+  },
+  "require": {
+    "composer/composer": "^1.1",
+    "symfony/process": "^3.1"
+  },
+  "require-dev": {
+
+  },
+  "config": {
+    "bin-dir": "bin/"
+  },
+  "bin": [
+    "bin/hook-processor"
+  ],
+  "scripts": {
+    "post-install-cmd": [
+      "Bitban\\GitHooks\\Composer\\ScriptHandler::checkHooks"
+    ],
+    "post-update-cmd": [
+      "Bitban\\GitHooks\\Composer\\ScriptHandler::checkHooks"
+    ]
+  }
+}
