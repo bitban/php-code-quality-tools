@@ -23,7 +23,7 @@ class ScriptHandler
         // bin/hook-processor check <sourcePath> <destinationPath> <projectPath>
 
         $options = self::getOptions($event);
-
+        
         $cmd = 'check';
         $projectPath = realpath($event->getComposer()->getConfig()->get('vendor-dir') . '/../');
         $sourcePath = realpath(__DIR__ . '/../../hooks');

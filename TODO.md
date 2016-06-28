@@ -1,10 +1,10 @@
 * <del>Single script to process all hooks</del>
 * <del>Command to install hooks (copy rather than symlink)</del>
 * <del>Check that hooks are installed</del>
-* post-merge script
-  * composer install (refactor)
-* post-checkout script
-  * composer install (refactor)
+* <del>post-merge script</del>
+  * <del>composer install (refactor)</del>
+* <del>post-checkout script</del>
+  * <del>composer install (refactor)</del>
 * pre-commit script
   * linter
     * Errors: var_dump()

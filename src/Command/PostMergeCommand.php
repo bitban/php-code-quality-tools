@@ -8,13 +8,15 @@
 namespace Bitban\GitHooks\Command;
 
 
+use Bitban\GitHooks\Traits\CommonActionsTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
 
 class PostMergeCommand extends Command
 {
+    use CommonActionsTrait;
+    
     const COMMAND_NAME = 'post-merge';
     const COMMAND_DESCRIPTION = 'post-merge Git hook';
     const ARG_PROJECT_PATH = 'projectPath';
@@ -37,24 +39,7 @@ class PostMergeCommand extends Command
             $output->writeln('<info>Project path: ' . $projectPath . '</info>');
         }
 
-        chdir($projectPath);
         $gitCommand = "git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD | grep composer.lock";
-        
-        if ($output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {
-            $output->writeln('<info>Executing: ' . $gitCommand . '</info>');
-        }
-        
-        $process = new Process($gitCommand);
-        $process->run();
-        $processOutput = $process->getOutput();
-        $output->writeln('<error>' . $process->getErrorOutput() . '</error>');
-        if ($processOutput != '') {
-            $output->writeln('<info>composer.lock has changed. Should run composer install<info>');
-            $composerCommand = "composer install -o --prefer-dist --ignore-platform-reqs";
-            $process = new Process($composerCommand);
-            $process->run();
-            $output->writeln('<info>' . $process->getOutput() . '</info>');
-            $output->writeln('<info>' . $process->getErrorOutput() . '</info>');
-        }
+        $this->checkComposerLockChanges($projectPath, $gitCommand, $output);
     }
 }

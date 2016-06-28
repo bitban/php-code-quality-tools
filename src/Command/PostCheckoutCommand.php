@@ -8,13 +8,15 @@
 namespace Bitban\GitHooks\Command;
 
 
+use Bitban\GitHooks\Traits\CommonActionsTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
 
 class PostCheckoutCommand extends Command
 {
+    use CommonActionsTrait;
+    
     const COMMAND_NAME = 'post-checkout';
     const COMMAN_DESCRIPTION = 'post-checkout Git hook';
     const ARG_PROJECT_PATH = 'projectPath';
@@ -42,27 +44,8 @@ class PostCheckoutCommand extends Command
         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
             $output->writeln('<info>Project path: ' . $projectPath . '</info>');
         }
-        
-        chdir($projectPath);
-        if (file_exists($projectPath . '/composer.lock')) {
-            $gitCommand = "git diff --shortstat $prevCommit..$postCommit composer.lock";
-            
-            if ($output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {
-                $output->writeln("<info>Executing: $gitCommand</info>");
-            }
-            
-            $process = new Process($gitCommand);
-            $process->run();
-            $processOutput = $process->getOutput();
-            $output->writeln('<error>' . $process->getErrorOutput() . '</error>');
-            if ($processOutput != '') {
-                $output->writeln("<info>composer.lock has changed. Should run composer install</info>");
-                $composerCommand = "composer install -o --prefer-dist --ignore-platform-reqs";
-                $process = new Process($composerCommand);
-                $process->run();
-                $output->writeln('<info>' . $process->getOutput() . '</info>');
-                $output->writeln('<info>' . $process->getErrorOutput() . '</info>');
-            }
-        }
+
+        $gitCommand = "git diff --shortstat $prevCommit..$postCommit composer.lock";
+        $this->checkComposerLockChanges($projectPath, $gitCommand, $output);
     }
 }
