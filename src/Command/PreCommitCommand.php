@@ -84,10 +84,12 @@ class PreCommitCommand extends Command
         foreach ($changedFiles as $file) {
             if (preg_match(PreCommitCommand::PHP_FILES_IN_SRC, $file)) {
                 $this->changedFiles['php'][] = $file;
-            } elseif (preg_match(PreCommitCommand::JSON_FILES_IN_SRC, $file)) {
-                $this->changedFiles['json'][] = $file;
-            } elseif (preg_match(PreCommitCommand::COMPOSER_FILES, $file)) {
+            }
+            if (preg_match(PreCommitCommand::COMPOSER_FILES, $file)) {
                 $this->changedFiles['composer'][] = $file;
+            }
+            if (preg_match(PreCommitCommand::JSON_FILES_IN_SRC, $file)) {
+                $this->changedFiles['json'][] = $file;
             }
         }
 
