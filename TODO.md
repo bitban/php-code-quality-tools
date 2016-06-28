@@ -6,13 +6,13 @@
 * <del>post-checkout script</del>
   * <del>composer install (refactor)</del>
 * pre-commit script
-  * linter
-    * Errors: var_dump()
-    * Warnings: empty()
-  * composer.json + composer.lock pack
+  * <del>linter</del>
+    * <del>Errors: var_dump()</del>
+    * <del>Warnings: empty()</del>
+  * <del>composer.json + composer.lock pack</del>
   * php-cs
   * php-cs-fixer
   * php-unit (not yet)
   * code compiling (not yet)
   * asset minification (not yet)
-* commit-msg script
+* commit-msg script (not yet)

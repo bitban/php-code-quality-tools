@@ -1,3 +1,32 @@
 #!/usr/bin/env bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-${DIR}/../../bin/hook-processor -vvv pre-commit
+${DIR}/../../bin/hook-processor -vvv pre-commit ${DIR}/../../
+
+# http://stackoverflow.com/questions/3417896/how-do-i-prompt-the-user-from-within-a-commit-msg-hook
+
+OUT=$?
+
+if [ ${OUT} -eq 2 ]; then
+
+    # status code 2 from hook-processor pre-commit means there are warnings
+
+    # Allows us to read user input below, assigns stdin to keyboard
+    exec < /dev/tty
+
+    while true; do
+      read -p "[pre-commit hook] You have warnings. Do you really want to continue? (Y/n) " yn
+      if [ "$yn" = "" ]; then
+        yn='Y'
+      fi
+      case $yn in
+          [Yy] ) exit;;
+          [Nn] ) exit 1;;
+          * ) echo "Please answer y or n for yes or no.";;
+      esac
+    done
+
+elif [ ${OUT} -ne 0 ]; then
+
+    exit 1;
+
+fi;
