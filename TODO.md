@@ -1,3 +1,7 @@
+# PHP Code Quality Tools - Roadmap
+
+## Initial launch features
+
 * <del>Single script to process all hooks</del>
 * <del>Command to install hooks (copy rather than symlink)</del>
 * <del>Check that hooks are installed</del>
@@ -5,14 +9,22 @@
   * <del>composer install (refactor)</del>
 * <del>post-checkout script</del>
   * <del>composer install (refactor)</del>
-* pre-commit script [WIP]
-  * <del>linter</del>
+* pre-commit script
+    * <del>PHP linter</del>
     * <del>Errors: var_dump()</del>
     * <del>Warnings: empty()</del>
-  * <del>composer.json + composer.lock pack</del>
-  * <del>php-cs</del>
-  * php-cs-fixer
-  * php-unit (not yet)
-  * code compiling (not yet)
-  * asset minification (not yet)
-* commit-msg script (not yet)
+    * Detect not initialised variable usage
+    * JSON linter
+    * Show all errors instead of stopping on first
+  * <del>composer.json file commited alone</del>
+  * <del>PSR-2 validation/del>
+  * <del>PSR-2 fixer</del>
+    * dry run
+
+## Further improvements
+
+* pre-commit script
+  * php-unit
+  * code compiling
+  * asset minification
+* commit-msg script

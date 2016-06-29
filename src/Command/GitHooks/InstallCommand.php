@@ -18,15 +18,17 @@ use Symfony\Component\Filesystem\Filesystem;
 class InstallCommand extends Command
 {
     const COMMAND_NAME = 'hooks:install';
-    const COMMAND_DESCRIPTION = 'Install Git hooks';
-    const ARG_SOURCE_PATH = 'sourcePath';
-    const ARG_DESTINATION_PATH = 'destinationPath';
+    const COMMAND_DESCRIPTION = 'Installs Git hooks into destination path';
+    const COMMAND_HELP = 'Installs Git hooks into destination path. If destination path already exists, it is deleted and recreated.';
+    const ARG_SOURCE_PATH = 'hooksSourcePath';
+    const ARG_DESTINATION_PATH = 'hooksDestinationPath';
     
     protected function configure()
     {
         $this
             ->setName(self::COMMAND_NAME)
             ->setDescription(self::COMMAND_DESCRIPTION)
+            ->setHelp(self::COMMAND_HELP)
             ->addArgument(self::ARG_SOURCE_PATH, InputArgument::REQUIRED)
             ->addArgument(self::ARG_DESTINATION_PATH, InputArgument::REQUIRED);
     }

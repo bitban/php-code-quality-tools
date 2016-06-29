@@ -9,6 +9,7 @@ namespace Bitban\PhpCodeQualityTools\Command\GitHooks;
 
 use Bitban\PhpCodeQualityTools\Traits\CommonActionsTrait;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -27,9 +28,9 @@ class PostCheckoutCommand extends Command
         $this
             ->setName(self::COMMAND_NAME)
             ->setDescription(self::COMMAN_DESCRIPTION)
-            ->addArgument(self::ARG_PROJECT_PATH)
-            ->addArgument(self::ARG_PREV_COMMIT)
-            ->addArgument(self::ARG_POST_COMMIT);
+            ->addArgument(self::ARG_PROJECT_PATH, InputArgument::REQUIRED)
+            ->addArgument(self::ARG_PREV_COMMIT, InputArgument::REQUIRED)
+            ->addArgument(self::ARG_POST_COMMIT, InputArgument::REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

@@ -21,6 +21,7 @@ class FixCodeStyleCommand extends Command
 {
     const COMMAND_NAME = 'codestyle:fix';
     const COMMAND_DESCRIPTION = 'Fixes PHP code style according to PSR-2 rules';
+    const COMMAND_HELP = 'Fixes code style of files according to PSR-2 recommendations. It may fix all project files or only files to be commited.';
     const ARG_PROJECT_PATH = 'projectPath';
     const OPT_COMMITED_FILES = 'commited-files';
 
@@ -40,13 +41,14 @@ class FixCodeStyleCommand extends Command
         $this
             ->setName(self::COMMAND_NAME)
             ->setDescription(self::COMMAND_DESCRIPTION)
+            ->setHelp(self::COMMAND_HELP)
             ->addArgument(self::ARG_PROJECT_PATH, InputArgument::REQUIRED)
-            ->addOption(self::OPT_COMMITED_FILES, null, InputOption::VALUE_OPTIONAL, 'If present, only commited files will be fixed', true);
+            ->addOption(self::OPT_COMMITED_FILES, null, InputOption::VALUE_NONE, 'If present, only commited files will be fixed');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->hasParameterOption('--' . self::OPT_COMMITED_FILES)) {
+        if ($input->getOption(self::OPT_COMMITED_FILES)) {
             $output->writeln("<info>Fixing commited files</info>");
             $this->extractCommitFiles($output);
             $files = $this->changedFiles['php'];

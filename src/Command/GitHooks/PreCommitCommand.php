@@ -15,6 +15,8 @@ use Bitban\PhpCodeQualityTools\Validators\PhpCodeValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpSyntaxValidator;
 use Bitban\PhpCodeQualityTools\Validators\WarningException;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\Input;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -40,7 +42,7 @@ class PreCommitCommand extends Command
         $this
             ->setName(self::COMMAND_NAME)
             ->setDescription(self::COMMAND_DESCRIPTION)
-            ->addArgument(self::ARG_PROJECT_PATH);
+            ->addArgument(self::ARG_PROJECT_PATH, InputArgument::REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

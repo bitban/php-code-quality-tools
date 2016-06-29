@@ -16,9 +16,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CheckCommand extends Command
 {
     const COMMAND_NAME = 'hooks:check';
-    const COMMAND_DESCRIPTION = 'Check if Git hooks are installed';
-    const ARG_SOURCE_PATH = 'sourcePath';
-    const ARG_DESTINATION_PATH = 'destinationPath';
+    const COMMAND_DESCRIPTION = 'Checks if Git hooks are installed';
+    const COMMAND_HELP = 'Checks if Git hooks are installed. If not, it gives a hint to install them, but does not take any action automatically';
+    const ARG_SOURCE_PATH = 'hooksSourcePath';
+    const ARG_DESTINATION_PATH = 'hooksDestinationPath';
     const ARG_PROJECT_PATH = 'projectPath';
     
     protected function configure()
@@ -26,6 +27,7 @@ class CheckCommand extends Command
         $this
             ->setName(self::COMMAND_NAME)
             ->setDescription(self::COMMAND_DESCRIPTION)
+            ->setHelp(self::COMMAND_HELP)
             ->addArgument(self::ARG_SOURCE_PATH, InputArgument::REQUIRED)
             ->addArgument(self::ARG_DESTINATION_PATH, InputArgument::REQUIRED)
             ->addArgument(self::ARG_PROJECT_PATH, InputArgument::REQUIRED);
@@ -62,8 +64,8 @@ class CheckCommand extends Command
         $output->setDecorated(true);
         if (!$result) {
             $installCommand = InstallCommand::COMMAND_NAME;
-            $output->writeln("<error>Your hooks are not properly configured! Install them using:</error>");
-            $output->writeln("<comment>\n$projectPath/bin/php-cqtools $installCommand $sourcePath $destinationPath\n</comment>");
+            $output->writeln("<error>Your hooks are not properly configured!</error>");
+            $output->writeln("<comment>You may install them running the folowing command:\n\n$projectPath/bin/php-cqtools $installCommand $sourcePath $destinationPath\n</comment>");
             $result = false;
         }
 
