@@ -2,6 +2,7 @@
 <?php
 
 use Bitban\GitHooks\Command\CheckCommand;
+use Bitban\GitHooks\Command\FixCodeStyleCommand;
 use Bitban\GitHooks\Command\InstallCommand;
 use Bitban\GitHooks\Command\PostCheckoutCommand;
 use Bitban\GitHooks\Command\PostMergeCommand;
@@ -28,6 +29,8 @@ $console->addCommands([
     new InstallCommand(),
     new PostCheckoutCommand(),
     new PostMergeCommand(),
-    new PreCommitCommand()
+    new PreCommitCommand(),
+
+    new FixCodeStyleCommand()
 ]);
 $console->run();

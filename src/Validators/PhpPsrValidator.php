@@ -28,7 +28,7 @@ class PhpPsrValidator implements ValidatorInterface
      */
     public function validate()
     {
-        $this->output->writeln('<info>Validating PHP code style</info>');
+        $this->output->writeln('<info>Validating PHP PSR-2 compliance</info>');
 
         foreach ($this->files as $file) {
             $command = "php bin/phpcs --standard=PSR2 $file";
