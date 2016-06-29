@@ -50,11 +50,11 @@ class PhpCodeValidator implements ValidatorInterface
                     $this->output->writeln($file);
                     $this->output->writeln("<$severity>$message in file $file</$severity>");
 
-                    $exceptionMessage = "You have not allowed code in PHP files. Fix it before proceeding!";
+                    $exceptionMessage = "You have not allowed code in PHP files.";
                     if ($validation['severity'] === ValidatorInterface::SEVERITY_WARNING) {
                         $exception = new WarningException($exceptionMessage);
                     } else {
-                        $exception = new ErrorException($exceptionMessage);
+                        $exception = new ErrorException($exceptionMessage . ' Fix it before proceeding!');
                     }
                     throw $exception;
                 }

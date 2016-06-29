@@ -11,6 +11,7 @@ namespace Bitban\GitHooks\Command;
 use Bitban\GitHooks\Infrastructure\Git\ExtractCommitedFiles;
 use Bitban\GitHooks\Validators\ComposerValidator;
 use Bitban\GitHooks\Validators\ErrorException;
+use Bitban\GitHooks\Validators\PhpPsrValidator;
 use Bitban\GitHooks\Validators\PhpCodeValidator;
 use Bitban\GitHooks\Validators\PhpSyntaxValidator;
 use Bitban\GitHooks\Validators\WarningException;
@@ -57,6 +58,7 @@ class PreCommitCommand extends Command
             if (true === $this->isProcessingAnyPhpFile()) {
                 (new PhpSyntaxValidator($this->changedFiles['php'], $output))->validate();
                 (new PhpCodeValidator($this->changedFiles['php'], $output))->validate();
+                (new PhpPsrValidator($this->changedFiles['php'], $output))->validate();
             }
 
             if (true === $this->isProcessingAnyJsonFile()) {

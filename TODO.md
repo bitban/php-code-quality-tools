@@ -5,12 +5,12 @@
   * <del>composer install (refactor)</del>
 * <del>post-checkout script</del>
   * <del>composer install (refactor)</del>
-* pre-commit script
+* pre-commit script [WIP]
   * <del>linter</del>
     * <del>Errors: var_dump()</del>
     * <del>Warnings: empty()</del>
   * <del>composer.json + composer.lock pack</del>
-  * php-cs
+  * <del>php-cs</del>
   * php-cs-fixer
   * php-unit (not yet)
   * code compiling (not yet)
