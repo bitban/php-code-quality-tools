@@ -95,6 +95,8 @@ class InstallCommand extends Command
             }
         }
 
-        rmdir($directory);
+        if (is_dir($directory)) {
+            rmdir($directory);
+        }
     }
 }

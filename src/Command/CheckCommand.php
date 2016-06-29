@@ -64,8 +64,8 @@ class CheckCommand extends Command
         $output->setDecorated(true);
         if (!$result) {
             $installCommand = InstallCommand::COMMAND_NAME;
-            $output->writeln("<error>Hey! Do not cheat and set up your hooks!</error>");
-            $output->writeln("<info>Please run following command:\n$projectPath/bin/hook-processor $installCommand $sourcePath $destinationPath</info>");
+            $output->writeln("<comment>A new version of hooks is available. Please update them running:</comment>");
+            $output->writeln("<comment>\n$projectPath/bin/hook-processor $installCommand $sourcePath $destinationPath\n</comment>");
             $result = false;
         }
 
