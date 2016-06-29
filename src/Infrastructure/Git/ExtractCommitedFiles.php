@@ -5,7 +5,7 @@
  * Todos los derechos reservados.
  */
 
-namespace Bitban\GitHooks\Infrastructure\Git;
+namespace Bitban\PhpCodeQualityTools\Infrastructure\Git;
 
 
 class ExtractCommitedFiles

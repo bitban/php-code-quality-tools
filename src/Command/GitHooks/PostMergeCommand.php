@@ -5,10 +5,9 @@
  * Todos los derechos reservados.
  */
 
-namespace Bitban\GitHooks\Command;
+namespace Bitban\PhpCodeQualityTools\Command\GitHooks;
 
-
-use Bitban\GitHooks\Traits\CommonActionsTrait;
+use Bitban\PhpCodeQualityTools\Traits\CommonActionsTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,7 +16,7 @@ class PostMergeCommand extends Command
 {
     use CommonActionsTrait;
     
-    const COMMAND_NAME = 'post-merge';
+    const COMMAND_NAME = 'hooks:post-merge';
     const COMMAND_DESCRIPTION = 'post-merge Git hook';
     const ARG_PROJECT_PATH = 'projectPath';
 

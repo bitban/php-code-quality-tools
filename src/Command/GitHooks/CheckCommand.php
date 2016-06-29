@@ -5,9 +5,9 @@
  * Todos los derechos reservados.
  */
 
-namespace Bitban\GitHooks\Command;
+namespace Bitban\PhpCodeQualityTools\Command\GitHooks;
 
-
+use Bitban\PhpCodeQualityTools\Constants;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CheckCommand extends Command
 {
-    const COMMAND_NAME = 'check';
+    const COMMAND_NAME = 'hooks:check';
     const COMMAND_DESCRIPTION = 'Check if Git hooks are installed';
     const ARG_SOURCE_PATH = 'sourcePath';
     const ARG_DESTINATION_PATH = 'destinationPath';
@@ -49,11 +49,9 @@ class CheckCommand extends Command
 
                 $result = $result && $filesMatch;
 
-                $okCharacter = "<fg=green>\xE2\x9C\x93</>";
-                $koCharacter = "<fg=red>\xE2\x9C\x97</>";
-
                 if ($output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {
-                    $output->writeln("<info>Comparing $sourceFile with $destinationFile</info> " . ($filesMatch ? $okCharacter : $koCharacter));
+                    $output->writeln("<info>Comparing $sourceFile with $destinationFile</info> " . 
+                        ($filesMatch ? Constants::CHARACTER_OK : Constants::CHARACTER_KO));
                 }
             }
         } catch (\Exception $e) {
@@ -64,8 +62,8 @@ class CheckCommand extends Command
         $output->setDecorated(true);
         if (!$result) {
             $installCommand = InstallCommand::COMMAND_NAME;
-            $output->writeln("<comment>A new version of hooks is available. Please update them running:</comment>");
-            $output->writeln("<comment>\n$projectPath/bin/hook-processor $installCommand $sourcePath $destinationPath\n</comment>");
+            $output->writeln("<error>Your hooks are not properly configured! Install them using:</error>");
+            $output->writeln("<comment>\n$projectPath/bin/php-cqtools $installCommand $sourcePath $destinationPath\n</comment>");
             $result = false;
         }
 

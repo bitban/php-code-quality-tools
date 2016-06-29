@@ -5,9 +5,9 @@
  * Todos los derechos reservados.
  */
 
-namespace Bitban\GitHooks\Command;
+namespace Bitban\PhpCodeQualityTools\Command\GitHooks;
 
-
+use Bitban\PhpCodeQualityTools\Constants;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,7 +17,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class InstallCommand extends Command
 {
-    const COMMAND_NAME = 'install';
+    const COMMAND_NAME = 'hooks:install';
     const COMMAND_DESCRIPTION = 'Install Git hooks';
     const ARG_SOURCE_PATH = 'sourcePath';
     const ARG_DESTINATION_PATH = 'destinationPath';
@@ -51,8 +51,8 @@ class InstallCommand extends Command
             }
 
             $progressBar = new ProgressBar($output, count($hooks));
-            $progressBar->setBarCharacter('<fg=green>=</>');
-            $progressBar->setProgressCharacter("\xF0\x9F\x8D\xBA");
+            $progressBar->setBarCharacter(Constants::CHARACTER_PROGRESS_BAR);
+            $progressBar->setProgressCharacter(Constants::CHARACTER_BEER);
             
             foreach ($hooks as $hook) {
                 
@@ -70,7 +70,7 @@ class InstallCommand extends Command
             
             $progressBar->finish();
             $output->writeln('');
-            $output->writeln("<info>Hooks installed succesfully \xF0\x9F\x91\x8D</info>");
+            $output->writeln(sprintf('<info>Hooks installed succesfully %s</info>', Constants::CHARACTER_THUMB_UP));
             
         } catch (\Exception $e) {
             $output->writeln(" <error>" . $e->getMessage() . " Aborting</error>");

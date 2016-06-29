@@ -5,23 +5,22 @@
  * Todos los derechos reservados.
  */
 
-namespace Bitban\GitHooks\Command;
+namespace Bitban\PhpCodeQualityTools\Command\GitHooks;
 
-
-use Bitban\GitHooks\Infrastructure\Git\ExtractCommitedFiles;
-use Bitban\GitHooks\Validators\ComposerValidator;
-use Bitban\GitHooks\Validators\ErrorException;
-use Bitban\GitHooks\Validators\PhpPsrValidator;
-use Bitban\GitHooks\Validators\PhpCodeValidator;
-use Bitban\GitHooks\Validators\PhpSyntaxValidator;
-use Bitban\GitHooks\Validators\WarningException;
+use Bitban\PhpCodeQualityTools\Infrastructure\Git\ExtractCommitedFiles;
+use Bitban\PhpCodeQualityTools\Validators\ComposerValidator;
+use Bitban\PhpCodeQualityTools\Validators\ErrorException;
+use Bitban\PhpCodeQualityTools\Validators\PhpPsrValidator;
+use Bitban\PhpCodeQualityTools\Validators\PhpCodeValidator;
+use Bitban\PhpCodeQualityTools\Validators\PhpSyntaxValidator;
+use Bitban\PhpCodeQualityTools\Validators\WarningException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PreCommitCommand extends Command
 {
-    const COMMAND_NAME = 'pre-commit';
+    const COMMAND_NAME = 'hooks:pre-commit';
     const COMMAND_DESCRIPTION = 'pre-commit Git hook';
     const ARG_PROJECT_PATH = 'projectPath';
 
@@ -77,6 +76,9 @@ class PreCommitCommand extends Command
         }
     }
 
+    /**
+     * @param OutputInterface $output
+     */
     private function extractCommitFiles($output)
     {
         $output->write('<info>Fetching changed files...</info>');
@@ -95,7 +97,7 @@ class PreCommitCommand extends Command
             }
         }
 
-        $result = (count($changedFiles) > 1) ? count($changedFiles) . ' files changed' : 'No files changed';
+        $result = (count($changedFiles) > 1) ? ' ' . count($changedFiles) . ' files changed' : ' No files changed';
         $output->writeln("<info>$result</info>");
 
         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {

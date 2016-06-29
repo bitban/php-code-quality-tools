@@ -5,7 +5,7 @@
  * Todos los derechos reservados.
  */
 
-namespace Bitban\GitHooks\Traits;
+namespace Bitban\PhpCodeQualityTools\Traits;
 
 
 use Symfony\Component\Console\Output\OutputInterface;

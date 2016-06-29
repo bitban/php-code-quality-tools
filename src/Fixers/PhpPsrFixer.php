@@ -5,10 +5,10 @@
  * Todos los derechos reservados.
  */
 
-namespace Bitban\GitHooks\Fixers;
+namespace Bitban\PhpCodeQualityTools\Fixers;
 
 
-use Bitban\GitHooks\Interfaces\FixerInterface;
+use Bitban\PhpCodeQualityTools\Interfaces\FixerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 

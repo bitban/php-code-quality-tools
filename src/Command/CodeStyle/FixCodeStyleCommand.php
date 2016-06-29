@@ -5,11 +5,12 @@
  * Todos los derechos reservados.
  */
 
-namespace Bitban\GitHooks\Command;
+namespace Bitban\PhpCodeQualityTools\Command\CodeStyle;
 
 
-use Bitban\GitHooks\Fixers\PhpPsrFixer;
-use Bitban\GitHooks\Infrastructure\Git\ExtractCommitedFiles;
+use Bitban\PhpCodeQualityTools\Command\GitHooks\PreCommitCommand;
+use Bitban\PhpCodeQualityTools\Fixers\PhpPsrFixer;
+use Bitban\PhpCodeQualityTools\Infrastructure\Git\ExtractCommitedFiles;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class FixCodeStyleCommand extends Command
 {
-    const COMMAND_NAME = 'fixphpcs';
+    const COMMAND_NAME = 'codestyle:fix';
     const COMMAND_DESCRIPTION = 'Fixes PHP code style according to PSR-2 rules';
     const ARG_PROJECT_PATH = 'projectPath';
     const OPT_COMMITED_FILES = 'commited-files';

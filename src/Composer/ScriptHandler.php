@@ -5,8 +5,7 @@
  * Todos los derechos reservados.
  */
 
-namespace Bitban\GitHooks\Composer;
-
+namespace Bitban\PhpCodeQualityTools\Composer;
 
 use Composer\Script\Event;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -20,11 +19,11 @@ class ScriptHandler
      */
     public static function checkHooks(Event $event)
     {
-        // bin/hook-processor check <sourcePath> <destinationPath> <projectPath>
+        // bin/php-cqtools hooks:check <sourcePath> <destinationPath> <projectPath>
 
         $options = self::getOptions($event);
         
-        $cmd = 'check';
+        $cmd = 'hooks:check';
         $projectPath = realpath($event->getComposer()->getConfig()->get('vendor-dir') . '/../');
         $sourcePath = realpath(__DIR__ . '/../../hooks');
         $destinationPath = realpath($projectPath . '/.git/hooks');
@@ -42,7 +41,7 @@ class ScriptHandler
 
         $php = escapeshellarg(static::getPhp(false));
         $phpArgs = implode(' ', array_map('escapeshellarg', static::getPhpArguments()));
-        $console = escapeshellarg($projectPath . '/bin/hook-processor');
+        $console = escapeshellarg($projectPath . '/bin/php-cqtools');
         if ($event->getIO()->isDecorated()) {
             $console .= ' --ansi';
         }

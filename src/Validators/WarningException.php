@@ -5,7 +5,7 @@
  * Todos los derechos reservados.
  */
 
-namespace Bitban\GitHooks\Validators;
+namespace Bitban\PhpCodeQualityTools\Validators;
 
 
 class WarningException extends \Exception

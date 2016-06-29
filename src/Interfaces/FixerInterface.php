@@ -5,7 +5,7 @@
  * Todos los derechos reservados.
  */
 
-namespace Bitban\GitHooks\Interfaces;
+namespace Bitban\PhpCodeQualityTools\Interfaces;
 
 
 interface FixerInterface
