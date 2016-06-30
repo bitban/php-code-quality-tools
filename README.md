@@ -60,10 +60,14 @@ Git hooks managed are:
 
 It performs several tasks:
 
-* Check that there are not PHP syntax errors
-* Check that composer.json is not commited without composer.lock
-* Check that forbidden functions (i.e., var_dump(), empty()) are commited
-* Check that code complies PSR-2 style recommendations (errors cannot be commited, warnings may be)
+* PHP files:
+  * Check for syntax errors
+  * Check that forbidden functions (i.e., var_dump(), empty()) are commited
+  * Check that code complies PSR-2 style recommendations (errors cannot be commited, warnings may be)
+* JSON files:
+  * Check for syntax errors
+* Composer related files:
+  * Check that composer.json is not commited without composer.lock
 
 #### post-checkout hook
 

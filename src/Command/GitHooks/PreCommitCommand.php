@@ -10,6 +10,7 @@ namespace Bitban\PhpCodeQualityTools\Command\GitHooks;
 use Bitban\PhpCodeQualityTools\Infrastructure\Git\ExtractCommitedFiles;
 use Bitban\PhpCodeQualityTools\Validators\ComposerValidator;
 use Bitban\PhpCodeQualityTools\Validators\ErrorException;
+use Bitban\PhpCodeQualityTools\Validators\JsonValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpPsrValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpCodeValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpSyntaxValidator;
@@ -63,6 +64,7 @@ class PreCommitCommand extends Command
             }
 
             if (true === $this->isProcessingAnyJsonFile()) {
+                (new JsonValidator($this->changedFiles['json'], $output))->validate();
             }
             
             return 0;
