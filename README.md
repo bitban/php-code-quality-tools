@@ -71,7 +71,7 @@ It performs several tasks:
 
 #### post-checkout hook
 
-It checks whether composer.lock has changed and, if so, launches `composer install` command.
+It checks whether composer.lock has changed or not . If so, launches `composer install` command.
 
 `bin/php-cqtools hooks:post-checkout <projectPath> <prevCommit> <postCommit>`
 
@@ -81,13 +81,19 @@ It has the same behaviour than post-checkout hook.
 
 `bin/php-cqtools hooks:post-merge <projectPath>`
 
-### Fix Code Style
+### Fix Code Style (PSR-2)
 
 Fixes code style of files according to PSR-2 recommendations.
 
 It may fix all project files or only files to be commited. This second option is very convinient to fix errors detected in pre-commit hook.
 
-`bin/php-cqtools codestyle:fix [--commited-files] <projectPath>`
+`bin/php-cqtools code:fix-psr2 [--commited-files] <path>`
+
+### Validate Code
+
+Performs all code validations across files in given path.
+
+`bin/php-cqtools code:validate [--commited-files] <path>`
 
 ## References
 

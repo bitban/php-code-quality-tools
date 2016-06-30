@@ -35,7 +35,7 @@ class PhpSniffsValidator implements ValidatorInterface
      */
     public function validate()
     {
-        $this->output->writeln('<info>Validating PHP sniffsº</info>');
+        $this->output->writeln('<info>Validating PHP sniffs</info>');
 
         foreach ($this->files as $file) {
             foreach ($this->sniffs as $sniff) {

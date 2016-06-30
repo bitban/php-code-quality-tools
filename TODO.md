@@ -23,8 +23,9 @@
 
 ## Further improvements
 
-* validate given folder (appart from commited files)
+* <del>validate given folder (appart from commited files)</del>
 * improve and simplify installation procedure
+* refactor code
 * pre-commit script
   * php-unit
   * code compiling
