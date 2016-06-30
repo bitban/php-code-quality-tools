@@ -2,7 +2,32 @@
 
 ## Installation
 
+Add bin directory to composer.json:
+
+```json
+"config": {
+    "bin-dir": "bin/"
+},
+```
+
+Add tool repository to composer.json:
+
+```json
+"repositories": [
+    ...,
+    {
+        "type": "vcs",
+        "url": "git@bbtgitl01:/utils/php-code-quality-tools.git"
+    },
+    ...
+],
+```
+
+
+Then, require new dependency:
+
 `composer require bitban/php-code-quality-tools`
+
 
 ## Command reference
 
@@ -26,7 +51,7 @@ Git hooks managed are:
 
 #### pre-commit hook
 
-It does several tasks:
+It performs several tasks:
 
 * Check that there are not PHP syntax errors
 * Check that composer.json is not commited without composer.lock
@@ -35,7 +60,7 @@ It does several tasks:
 
 #### post-checkout hook
 
-It checks wether composer.lock has changed and, if so, it launches `composer install` command.
+It checks whether composer.lock has changed and, if so, launches `composer install` command.
 
 `php-cqtools hooks:post-checkout <projectPath> <prevCommit> <postCommit>`
 
@@ -61,4 +86,3 @@ It may fix all project files or only files to be commited. This second option is
 * http://tech.zumba.com/2014/04/14/control-code-quality/
 * https://www.sitepoint.com/8-must-have-php-quality-assurance-tools/
 * http://phpqatools.org/
-

@@ -23,6 +23,7 @@
 
 ## Further improvements
 
+* improve and simplify installation procedure
 * pre-commit script
   * php-unit
   * code compiling
