@@ -7,7 +7,6 @@
 
 namespace Bitban\PhpCodeQualityTools\Fixers;
 
-
 use Bitban\PhpCodeQualityTools\Interfaces\FixerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
@@ -28,7 +27,7 @@ class PhpPsrFixer implements FixerInterface
         $this->output->writeln('<info>Fixing PHP PSR-2 compliance</info>');
 
         foreach ($this->files as $file) {
-            $command = "php bin/phpcbf --standard=PSR2 --suffix=.fixed --extensions=php,inc $file";
+            $command = "php bin/phpcbf --standard=PSR2 --extensions=php,inc $file";
 
             if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {
                 $this->output->writeln("<info>Running: $command</info>");
