@@ -7,7 +7,6 @@
 
 namespace Bitban\PhpCodeQualityTools\Command\CodeStyle;
 
-
 use Bitban\PhpCodeQualityTools\Command\GitHooks\PreCommitCommand;
 use Bitban\PhpCodeQualityTools\Fixers\PhpPsrFixer;
 use Bitban\PhpCodeQualityTools\Infrastructure\Git\ExtractCommitedFiles;

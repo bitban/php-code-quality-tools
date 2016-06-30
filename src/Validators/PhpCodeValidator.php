@@ -7,7 +7,6 @@
 
 namespace Bitban\PhpCodeQualityTools\Validators;
 
-
 use Bitban\PhpCodeQualityTools\Interfaces\ValidatorInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
@@ -39,7 +38,6 @@ class PhpCodeValidator implements ValidatorInterface
         $this->output->writeln('<info>Validating PHP code</info>');
 
         foreach ($this->files as $file) {
-
             foreach ($this->validations as $validation) {
                 $process = new Process(sprintf('grep --fixed-strings --ignore-case --quiet "%s" %s', $validation['code'], $file));
                 $process->run();

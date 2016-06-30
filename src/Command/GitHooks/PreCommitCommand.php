@@ -63,7 +63,6 @@ class PreCommitCommand extends Command
             }
 
             if (true === $this->isProcessingAnyJsonFile()) {
-
             }
             
             return 0;

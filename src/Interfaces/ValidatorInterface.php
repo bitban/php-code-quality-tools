@@ -7,7 +7,6 @@
 
 namespace Bitban\PhpCodeQualityTools\Interfaces;
 
-
 interface ValidatorInterface
 {
     const SEVERITY_WARNING = 'warning';

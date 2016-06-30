@@ -57,7 +57,6 @@ class InstallCommand extends Command
             $progressBar->setProgressCharacter(Constants::CHARACTER_BEER);
             
             foreach ($hooks as $hook) {
-                
                 $sourceFile = $sourcePath . '/' . $hook;
                 $destinationFile = $destinationPath . '/' . $hook;
 
@@ -73,7 +72,6 @@ class InstallCommand extends Command
             $progressBar->finish();
             $output->writeln('');
             $output->writeln(sprintf('<info>Hooks installed succesfully %s</info>', Constants::CHARACTER_THUMB_UP));
-            
         } catch (\Exception $e) {
             $output->writeln(" <error>" . $e->getMessage() . " Aborting</error>");
             return 1;
@@ -88,8 +86,7 @@ class InstallCommand extends Command
             unlink($directory);
         }
 
-        foreach (glob("{$directory}/*") as $file)
-        {
+        foreach (glob("{$directory}/*") as $file) {
             if (is_dir($file)) {
                 $this->recursiveRemoveDirectory($file);
             } else {

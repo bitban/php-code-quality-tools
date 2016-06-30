@@ -42,7 +42,9 @@ class CheckCommand extends Command
         $result = true;
         try {
             foreach (new \DirectoryIterator($sourcePath) as $hook) {
-                if($hook->isDot()) continue;
+                if ($hook->isDot()) {
+                    continue;
+                }
 
                 $sourceFile = $sourcePath . '/' . $hook;
                 $destinationFile = $destinationPath . '/' . $hook;
@@ -52,7 +54,7 @@ class CheckCommand extends Command
                 $result = $result && $filesMatch;
 
                 if ($output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {
-                    $output->writeln("<info>Comparing $sourceFile with $destinationFile</info> " . 
+                    $output->writeln("<info>Comparing $sourceFile with $destinationFile</info> " .
                         ($filesMatch ? Constants::CHARACTER_OK : Constants::CHARACTER_KO));
                 }
             }

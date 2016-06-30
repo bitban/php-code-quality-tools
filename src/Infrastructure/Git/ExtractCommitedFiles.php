@@ -7,7 +7,6 @@
 
 namespace Bitban\PhpCodeQualityTools\Infrastructure\Git;
 
-
 class ExtractCommitedFiles
 {
     /** @var array */

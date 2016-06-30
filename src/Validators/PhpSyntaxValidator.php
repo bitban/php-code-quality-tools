@@ -7,7 +7,6 @@
 
 namespace Bitban\PhpCodeQualityTools\Validators;
 
-
 use Bitban\PhpCodeQualityTools\Interfaces\ValidatorInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;

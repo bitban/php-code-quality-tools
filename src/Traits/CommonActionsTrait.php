@@ -7,7 +7,6 @@
 
 namespace Bitban\PhpCodeQualityTools\Traits;
 
-
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
@@ -40,7 +39,6 @@ trait CommonActionsTrait
     {
         chdir($projectPath);
         if (file_exists($projectPath . '/composer.lock')) {
-
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {
                 $output->writeln("<info>Executing: $gitCommand</info>");
             }

@@ -7,7 +7,6 @@
 
 namespace Bitban\PhpCodeQualityTools;
 
-
 class Constants
 {
     const CHARACTER_OK = "<fg=green>\xE2\x9C\x93</>";

@@ -7,7 +7,6 @@
 
 namespace Bitban\PhpCodeQualityTools\Validators;
 
-
 class ErrorException extends \Exception
 {
 

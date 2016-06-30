@@ -7,7 +7,6 @@
 
 namespace Bitban\PhpCodeQualityTools\Interfaces;
 
-
 interface FixerInterface
 {
     public function fix();

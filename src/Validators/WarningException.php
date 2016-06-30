@@ -7,7 +7,6 @@
 
 namespace Bitban\PhpCodeQualityTools\Validators;
 
-
 class WarningException extends \Exception
 {
 
