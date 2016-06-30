@@ -23,6 +23,7 @@ class FixPsr2Command extends Command
     const COMMAND_HELP = 'Fixes code style of files according to PSR-2 recommendations. It may fix all project files or only files to be commited.';
     const ARG_PATH = 'path';
     const OPT_COMMITED_FILES = 'commited-files';
+    const OPT_DRY_RUN = 'dry-run';
 
     const PHP_FILES_IN_SRC = '/^(.*)(\.php)|(\.inc)$/';
 
@@ -36,7 +37,8 @@ class FixPsr2Command extends Command
             ->setDescription(self::COMMAND_DESCRIPTION)
             ->setHelp(self::COMMAND_HELP)
             ->addArgument(self::ARG_PATH, InputArgument::REQUIRED)
-            ->addOption(self::OPT_COMMITED_FILES, null, InputOption::VALUE_NONE, 'If present, only commited files will be fixed');
+            ->addOption(self::OPT_COMMITED_FILES, null, InputOption::VALUE_NONE, 'If present, only commited files will be fixed')
+            ->addOption(self::OPT_DRY_RUN, null, InputOption::VALUE_NONE, 'If present, it shows diffs but does not change any files');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -48,7 +50,7 @@ class FixPsr2Command extends Command
             $output->writeln("<info>Fixing project files</info>");
             $this->changedFiles = [$input->getArgument(self::ARG_PATH)];
         }
-        (new PhpPsrFixer($this->changedFiles, $output))->fix();
+        (new PhpPsrFixer($this->changedFiles, $output))->fix($input->getOption(self::OPT_DRY_RUN));
     }
 
     /**

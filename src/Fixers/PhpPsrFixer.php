@@ -22,12 +22,21 @@ class PhpPsrFixer implements FixerInterface
         $this->output = $output;
     }
 
-    public function fix()
+    /**
+     * @param bool $dryRun
+     */
+    public function fix($dryRun = false)
     {
         $this->output->writeln('<info>Fixing PHP PSR-2 compliance</info>');
 
+        if ($dryRun) {
+            $this->output->write("<info>Dry run mode, no changes will be made</info>");
+        }
+
         foreach ($this->files as $file) {
-            $command = "php bin/phpcbf --standard=PSR2 --extensions=php,inc $file";
+            $command = $dryRun ?
+                "php bin/phpcs --standard=PSR2 --report-full --report-diff $file" :
+                "php bin/phpcbf --standard=PSR2 --extensions=php,inc $file";
 
             if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {
                 $this->output->writeln("<info>Running: $command</info>");
@@ -35,7 +44,7 @@ class PhpPsrFixer implements FixerInterface
 
             $process = new Process($command);
 
-            if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {
+            if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG || $dryRun) {
                 $process->setTty(true);
             }
             $process->run();
