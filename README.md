@@ -99,3 +99,4 @@ Here are several interesting links with information (and inspiration) about this
 * http://tech.zumba.com/2014/04/14/control-code-quality/
 * https://www.sitepoint.com/8-must-have-php-quality-assurance-tools/
 * http://phpqatools.org/
+* https://github.com/illusori/PHP_Codesniffer-VariableAnalysis/

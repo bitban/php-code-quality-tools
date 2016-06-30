@@ -13,10 +13,10 @@ use Bitban\PhpCodeQualityTools\Validators\ErrorException;
 use Bitban\PhpCodeQualityTools\Validators\JsonValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpPsrValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpCodeValidator;
+use Bitban\PhpCodeQualityTools\Validators\PhpSniffsValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpSyntaxValidator;
 use Bitban\PhpCodeQualityTools\Validators\WarningException;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -61,6 +61,7 @@ class PreCommitCommand extends Command
                 (new PhpSyntaxValidator($this->changedFiles['php'], $output))->validate();
                 (new PhpCodeValidator($this->changedFiles['php'], $output))->validate();
                 (new PhpPsrValidator($this->changedFiles['php'], $output))->validate();
+                (new PhpSniffsValidator($this->changedFiles['php'], $output))->validate();
             }
 
             if (true === $this->isProcessingAnyJsonFile()) {

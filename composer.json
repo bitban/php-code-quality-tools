@@ -36,9 +36,11 @@
   ],
   "scripts": {
     "post-install-cmd": [
+      "Bitban\\PhpCodeQualityTools\\Composer\\ScriptHandler::checkSniffs",
       "Bitban\\PhpCodeQualityTools\\Composer\\ScriptHandler::checkHooks"
     ],
     "post-update-cmd": [
+      "Bitban\\PhpCodeQualityTools\\Composer\\ScriptHandler::checkSniffs",
       "Bitban\\PhpCodeQualityTools\\Composer\\ScriptHandler::checkHooks"
     ]
   }

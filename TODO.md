@@ -13,7 +13,7 @@
     * <del>PHP linter</del>
     * <del>Errors: var_dump()</del>
     * <del>Warnings: empty()</del>
-    * Detect not initialised variable usage
+    * <del>Detect not initialised variable usage (and other sniffs related to variables)</del>
     * <del>JSON linter</del>
     * Show all errors instead of stopping on first
   * <del>composer.json file commited alone</del>
@@ -23,7 +23,7 @@
 
 ## Further improvements
 
-* validate project folder (appart from commited files)
+* validate given folder (appart from commited files)
 * improve and simplify installation procedure
 * pre-commit script
   * php-unit

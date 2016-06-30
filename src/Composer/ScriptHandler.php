@@ -9,11 +9,29 @@ namespace Bitban\PhpCodeQualityTools\Composer;
 
 use Composer\Script\Event;
 use Symfony\Component\Console\Exception\RuntimeException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
 class ScriptHandler
 {
+    public static function checkSniffs(Event $event)
+    {
+        $event->getIO()->write("Dumping sniffs");
+        
+        $sniffs = [
+            '/Standards/Generic/Sniffs/CodeAnalysis/VariableAnalysisSniff.php'
+        ];
+        
+        $sourcePath = realpath(__DIR__ . '/../Infrastructure/CodeSniffer');
+        $destinationPath = realpath($event->getComposer()->getConfig()->get('vendor-dir') . '/squizlabs/php_codesniffer/CodeSniffer');
+
+        $filesystem = new Filesystem();
+        foreach ($sniffs as $sniff) {
+            $filesystem->copy($sourcePath . $sniff, $destinationPath . $sniff, true);
+        }
+    }
+
     /**
      * @param Event $event
      */
