@@ -19,7 +19,7 @@
   * <del>composer.json file commited alone</del>
   * <del>PSR-2 validation/del>
   * <del>PSR-2 fixer</del>
-    * dry run
+    * <del>dry run</del>
 
 ## Further improvements
 
