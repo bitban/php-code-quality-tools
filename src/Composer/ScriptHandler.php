@@ -53,7 +53,7 @@ class ScriptHandler
             $console .= ' --ansi';
         }
 
-        $command = join(' ', [$console, $cmd, $projectPath]);
+        $command = join(' ', [$console, $cmd, $projectPath, '--skip-ok']);
         $process = new Process($php . ($phpArgs ? ' ' . $phpArgs : '') . ' ' . $command, null, null, null, $timeout);
         $process->run(function ($type, $buffer) use ($event) {
             $event->getIO()->write($buffer, false);

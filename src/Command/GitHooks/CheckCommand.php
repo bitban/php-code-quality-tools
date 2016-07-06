@@ -11,6 +11,7 @@ use Bitban\PhpCodeQualityTools\Constants;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CheckCommand extends Command
@@ -19,6 +20,7 @@ class CheckCommand extends Command
     const COMMAND_DESCRIPTION = 'Checks if Git hooks are installed';
     const COMMAND_HELP = 'Checks if Git hooks are installed. If not, it gives a hint to install them, but does not take any action automatically';
     const ARG_GIT_PROJECT_PATH = 'gitProjectPath';
+    const OPTION_SKIP_OK_MESSAGE = 'skip-ok';
     
     protected function configure()
     {
@@ -26,7 +28,8 @@ class CheckCommand extends Command
             ->setName(self::COMMAND_NAME)
             ->setDescription(self::COMMAND_DESCRIPTION)
             ->setHelp(self::COMMAND_HELP)
-            ->addArgument(self::ARG_GIT_PROJECT_PATH, InputArgument::OPTIONAL, 'Project path (current directory by default)', getcwd());
+            ->addArgument(self::ARG_GIT_PROJECT_PATH, InputArgument::OPTIONAL, 'Project path (current directory by default)', getcwd())
+            ->addOption(self::OPTION_SKIP_OK_MESSAGE, '', InputOption::VALUE_NONE);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -79,6 +82,10 @@ class CheckCommand extends Command
             $output->writeln("<error>Your hooks are not properly configured!</error>\n");
             $output->writeln("<comment>You may install them running the folowing command:\n\n$realProjectPath/bin/php-cqtools $installCommand $realSourcePath $realDestinationPath\n</comment>");
             $result = false;
+        } else {
+            if (!$input->getOption(self::OPTION_SKIP_OK_MESSAGE)) {
+                $output->writeln("<info>Your hooks are properly set. Nice job!</info> " . Constants::CHARACTER_THUMB_UP);
+            }
         }
 
         return $result ? 0 : 1;
