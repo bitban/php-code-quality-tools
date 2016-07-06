@@ -6,33 +6,33 @@ Check command reference section for more detailed information.
 
 ## Installation
 
-Add bin directory to composer.json:
+If you have not done this yet, add bin directory to composer.json:
 
 ```json
 "config": {
     "bin-dir": "bin/"
 },
 ```
-
-Add tool repository to composer.json:
+For a better experience, we also suggest to configure post-install and post-update script:
 
 ```json
-"repositories": [
-    ...,
-    {
-        "type": "vcs",
-        "url": "git@bbtgitl01:/utils/php-code-quality-tools.git"
-    },
-    ...
-],
+"scripts": {
+    "post-install-cmd": [
+        "Bitban\\PhpCodeQualityTools\\Composer\\ScriptHandler::checkSniffs",
+        "Bitban\\PhpCodeQualityTools\\Composer\\ScriptHandler::checkHooks"
+    ],
+    "post-update-cmd": [
+        "Bitban\\PhpCodeQualityTools\\Composer\\ScriptHandler::checkSniffs",
+        "Bitban\\PhpCodeQualityTools\\Composer\\ScriptHandler::checkHooks"
+    ]
+}
 ```
 
-
-Then, require new dependency:
+Then, require new dev dependency:
 
 `composer require --dev "bitban/php-code-quality-tools:dev-master"`
 
-After that, a new command is available:
+After that, a new command is available from project's root path:
 
 `bin/php-cqtools`
 
