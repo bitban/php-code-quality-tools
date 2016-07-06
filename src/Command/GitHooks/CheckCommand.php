@@ -18,9 +18,7 @@ class CheckCommand extends Command
     const COMMAND_NAME = 'hooks:check';
     const COMMAND_DESCRIPTION = 'Checks if Git hooks are installed';
     const COMMAND_HELP = 'Checks if Git hooks are installed. If not, it gives a hint to install them, but does not take any action automatically';
-    const ARG_SOURCE_PATH = 'hooksSourcePath';
-    const ARG_DESTINATION_PATH = 'hooksDestinationPath';
-    const ARG_PROJECT_PATH = 'projectPath';
+    const ARG_GIT_PROJECT_PATH = 'gitProjectPath';
     
     protected function configure()
     {
@@ -28,26 +26,38 @@ class CheckCommand extends Command
             ->setName(self::COMMAND_NAME)
             ->setDescription(self::COMMAND_DESCRIPTION)
             ->setHelp(self::COMMAND_HELP)
-            ->addArgument(self::ARG_SOURCE_PATH, InputArgument::REQUIRED)
-            ->addArgument(self::ARG_DESTINATION_PATH, InputArgument::REQUIRED)
-            ->addArgument(self::ARG_PROJECT_PATH, InputArgument::REQUIRED);
+            ->addArgument(self::ARG_GIT_PROJECT_PATH, InputArgument::OPTIONAL, 'Project path (current directory by default)', getcwd());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sourcePath = $input->getArgument(self::ARG_SOURCE_PATH);
-        $destinationPath = $input->getArgument(self::ARG_DESTINATION_PATH);
-        $projectPath = realpath($input->getArgument(self::ARG_PROJECT_PATH));
+        $projectPath = $input->getArgument(self::ARG_GIT_PROJECT_PATH);
+        $sourcePath = __DIR__ . '/../../../hooks';
+        $destinationPath = $projectPath . '/.git/hooks';
         
+        $realProjectPath = realpath($projectPath);
+        $realSourcePath = realpath($sourcePath);
+        $realDestinationPath = realpath($destinationPath);
+
+        if (!$realProjectPath) {
+            throw new \Exception("Cannot find project in $projectPath");
+        }
+        if (!$realSourcePath) {
+            throw new \Exception("Cannot find hooks in $sourcePath");
+        }
+        if (!$realDestinationPath) {
+            throw new \Exception("Cannot find hooks installation path: $destinationPath");
+        }
+
         $result = true;
         try {
-            foreach (new \DirectoryIterator($sourcePath) as $hook) {
+            foreach (new \DirectoryIterator($realSourcePath) as $hook) {
                 if ($hook->isDot()) {
                     continue;
                 }
 
-                $sourceFile = $sourcePath . '/' . $hook;
-                $destinationFile = $destinationPath . '/' . $hook;
+                $sourceFile = $realSourcePath . '/' . $hook;
+                $destinationFile = $realDestinationPath . '/' . $hook;
 
                 $filesMatch = @file_get_contents($sourceFile) === @file_get_contents($destinationFile);
 
@@ -66,8 +76,8 @@ class CheckCommand extends Command
         $output->setDecorated(true);
         if (!$result) {
             $installCommand = InstallCommand::COMMAND_NAME;
-            $output->writeln("<error>Your hooks are not properly configured!</error>");
-            $output->writeln("<comment>You may install them running the folowing command:\n\n$projectPath/bin/php-cqtools $installCommand $sourcePath $destinationPath\n</comment>");
+            $output->writeln("<error>Your hooks are not properly configured!</error>\n");
+            $output->writeln("<comment>You may install them running the folowing command:\n\n$realProjectPath/bin/php-cqtools $installCommand $realSourcePath $realDestinationPath\n</comment>");
             $result = false;
         }
 

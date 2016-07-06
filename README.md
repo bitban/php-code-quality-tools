@@ -42,7 +42,9 @@ After that, a new command is available:
 
 Checks if Git hooks are installed. If not, it gives a hint to install them, but does not take any action automatically.
 
-`bin/php-cqtools hooks:check <hooksSourcePath> <hooksDestinationPath> <projectPath>`
+`bin/php-cqtools hooks:check [<gitProjectPath>]`
+
+If `gitProjectPath` is not set, it takes current working directory as default value.
 
 ### Install Git Hooks
 
