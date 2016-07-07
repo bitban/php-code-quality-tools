@@ -7,57 +7,64 @@
 
 namespace Bitban\PhpCodeQualityTools\Validators;
 
-
+use Bitban\PhpCodeQualityTools\Constants;
 use Bitban\PhpCodeQualityTools\Interfaces\ValidatorInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-class PhpSniffsValidator implements ValidatorInterface
+class PhpSniffsValidator extends AbstractValidator
 {
-    private $files;
-    private $output;
-
-    private $sniffs;
+    protected $sniffs;
 
     public function __construct($files, OutputInterface $output)
     {
-        $this->files = $files;
-        $this->output = $output;
+        parent::__construct($files, $output);
 
         $this->sniffs = [
             'Generic.CodeAnalysis.VariableAnalysis',
         ];
     }
 
-    /**
-     * @throws ErrorException
-     * @throws WarningException
-     */
-    public function validate()
+    protected function getValidatorTitle()
     {
-        $this->output->writeln('<info>Validating PHP sniffs</info>');
+        return 'Validating PHP sniffs';
+    }
 
-        foreach ($this->files as $file) {
-            foreach ($this->sniffs as $sniff) {
-                $process = new Process(sprintf('php bin/phpcs --standard=Generic --sniffs=%s %s', $sniff, $file));
-                $process->run();
+    private function checkSniff($file, $sniff)
+    {
+        $process = new Process(sprintf('php bin/phpcs --standard=Generic --sniffs=%s %s', $sniff, $file));
 
-                $processOutput = $process->getOutput();
-                if ($processOutput != '') {
-                    $severity = preg_match('/\bERROR\b/', $processOutput) ? ValidatorInterface::SEVERITY_ERROR : ValidatorInterface::SEVERITY_WARNING;
-                    $messageClass = $severity === ValidatorInterface::SEVERITY_ERROR ? 'fg=red' : 'fg=yellow';
-                    $this->output->writeln("<$messageClass>$file</$messageClass>");
-                    $this->output->writeln("<$messageClass>$processOutput</$messageClass>");
+        $process->run();
 
-                    $exceptionMessage = "You have not allowed code in PHP files.";
-                    if ($severity === ValidatorInterface::SEVERITY_WARNING) {
-                        $exception = new WarningException($exceptionMessage);
-                    } else {
-                        $exception = new ErrorException($exceptionMessage . ' Fix it before proceeding!');
-                    }
-                    throw $exception;
-                }
+        $processOutput = $process->getOutput();
+        if ($processOutput != '') {
+            $severity = preg_match('/\bERROR\b/', $processOutput) ? ValidatorInterface::SEVERITY_ERROR : ValidatorInterface::SEVERITY_WARNING;
+            if ($severity === ValidatorInterface::SEVERITY_WARNING) {
+                $exception = new WarningException(sprintf(Constants::WARNING_MESSAGE_WRAPPER, $processOutput));
+            } else {
+                $exception = new ErrorException(sprintf(Constants::ERROR_MESSAGE_WRAPPER, $processOutput));
             }
+            throw $exception;
+        }
+    }
+
+    protected function check($file)
+    {
+        $warnings = [];
+        $errors = [];
+        foreach ($this->sniffs as $sniff) {
+            try {
+                $this->checkSniff($file, $sniff);
+            } catch (WarningException $we) {
+                $warnings[] = $we->getMessage();
+            } catch (ErrorException $ee) {
+                $errors[] = $ee->getMessage();
+            }
+        }
+        if (count($errors) > 0) {
+            throw new ErrorException(join("\n", array_merge($errors, $warnings)));
+        } elseif (count($warnings) > 0) {
+            throw new WarningException(join("\n", $warnings));
         }
     }
 }

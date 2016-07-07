@@ -13,7 +13,6 @@ use Bitban\PhpCodeQualityTools\Command\GitHooks\CheckCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\InstallCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\PostCheckoutCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\PostMergeCommand;
-use Bitban\PhpCodeQualityTools\Command\GitHooks\PreCommitCommand;
 use Bitban\PhpCodeQualityTools\PhpCodeQualityTools;
 use Symfony\Component\Console\Application as BaseApplication;
 
@@ -29,7 +28,6 @@ class Application extends BaseApplication
             new InstallCommand(),
             new PostCheckoutCommand(),
             new PostMergeCommand(),
-            new PreCommitCommand(),
 
             new FixPsr2Command(),
             new ValidateCommand()

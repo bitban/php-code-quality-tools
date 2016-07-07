@@ -7,27 +7,12 @@
 
 namespace Bitban\PhpCodeQualityTools\Validators;
 
-use Bitban\PhpCodeQualityTools\Interfaces\ValidatorInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
-class ComposerValidator implements ValidatorInterface
+class ComposerValidator extends AbstractValidator
 {
-    private $files;
-    private $output;
-    
-    public function __construct($files, OutputInterface $output)
-    {
-        $this->files = $files;
-        $this->output = $output;
-    }
-
-    /**
-     * @throws ErrorException
-     */
     public function validate()
     {
         $this->output->writeln('<info>Validating composer files</info>');
-        
+
         $composerJsonDetected = false;
         $composerLockDetected = false;
 
@@ -42,7 +27,18 @@ class ComposerValidator implements ValidatorInterface
         }
 
         if ($composerJsonDetected && !$composerLockDetected) {
-            throw new ErrorException("composer.lock must be committed if composer.json is modified!");
+            throw new ErrorException('composer.lock must be committed if composer.json is modified!');
         }
+
+    }
+
+    protected function check($file)
+    {
+        // No need to be implemented as validate() has been rewritten
+    }
+
+    protected function getValidatorTitle()
+    {
+        // No need to be implemented as validate() has been rewritten
     }
 }

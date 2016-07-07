@@ -52,6 +52,8 @@ Installs Git hooks into destination path. If destination path already exists, it
 
 `bin/php-cqtools hooks:install <hooksSourcePath> <hooksDestinationPath>`
 
+Files (hooks) are copied from hooksSourcePath to hooksDestinationPath.
+
 Git hooks managed are:
 
 * pre-commit
@@ -60,20 +62,13 @@ Git hooks managed are:
 
 #### pre-commit hook
 
-It performs several tasks:
+It calls code:validate command.
 
-* PHP files:
-  * Check for syntax errors
-  * Check that forbidden functions (i.e., var_dump(), empty()) are commited
-  * Check that code complies PSR-2 style recommendations (errors cannot be commited, warnings may be)
-* JSON files:
-  * Check for syntax errors
-* Composer related files:
-  * Check that composer.json is not commited without composer.lock
+`bin/php-cqtools code:validate --only-commited-files <projectPath>`
 
 #### post-checkout hook
 
-It checks whether composer.lock has changed or not . If so, launches `composer install` command.
+It checks whether composer.lock has changed or not. If so, launches `composer install` command.
 
 `bin/php-cqtools hooks:post-checkout <projectPath> <prevCommit> <postCommit>`
 
@@ -89,13 +84,24 @@ Fixes code style of files according to PSR-2 recommendations.
 
 It may fix all project files or only files to be commited. This second option is very convinient to fix errors detected in pre-commit hook.
 
-`bin/php-cqtools code:fix-psr2 [--commited-files] <path>`
+`bin/php-cqtools code:fix-psr2 [--only-commited-files] <path>`
 
 ### Validate Code
 
-Performs all code validations across files in given path.
+It performs several tasks:
 
-`bin/php-cqtools code:validate [--commited-files] <path>`
+* PHP files:
+  * Check for syntax errors
+  * Check that forbidden functions (i.e., var_dump(), empty()) are commited
+  * Check that code complies PSR-2 style recommendations (errors cannot be commited, warnings may be)
+* JSON files:
+  * Check for syntax errors
+* Composer related files:
+  * Check that composer.json is not commited without composer.lock (checked only with --only-commited-files modifier)
+
+`bin/php-cqtools code:validate [--only-commited-files] <path>`
+
+It does not check files in `/bin` and `/vendor` folders. When `--only-commited-files` options is enabled, `/tests` folder is also skipped.
 
 ## References
 

@@ -29,7 +29,7 @@ class CheckCommand extends Command
             ->setDescription(self::COMMAND_DESCRIPTION)
             ->setHelp(self::COMMAND_HELP)
             ->addArgument(self::ARG_GIT_PROJECT_PATH, InputArgument::OPTIONAL, 'Project path (current directory by default)', getcwd())
-            ->addOption(self::OPTION_SKIP_OK_MESSAGE, '', InputOption::VALUE_NONE);
+            ->addOption(self::OPTION_SKIP_OK_MESSAGE, '', InputOption::VALUE_NONE, 'Do not show OK message');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

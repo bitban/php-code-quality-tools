@@ -7,55 +7,30 @@
 
 namespace Bitban\PhpCodeQualityTools\Validators;
 
-use Bitban\PhpCodeQualityTools\Interfaces\ValidatorInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
+use Bitban\PhpCodeQualityTools\Constants;
 
-class PhpPsrValidator implements ValidatorInterface
+class PhpPsrValidator extends AbstractValidator
 {
-    private $files;
-    private $output;
-
-    public function __construct($files, OutputInterface $output)
+    protected function getValidatorTitle()
     {
-        $this->files = $files;
-        $this->output = $output;
+        return 'Validating PHP PSR-2 compliance';
     }
 
-    /**
-     * @throws ErrorException
-     */
-    public function validate()
+    protected function check($file)
     {
-        $this->output->writeln('<info>Validating PHP PSR-2 compliance</info>');
+        $process = $this->buildProcess("php bin/phpcs --standard=PSR2 $file");
+        
+        $process->run();
 
-        foreach ($this->files as $file) {
-            $command = "php bin/phpcs --standard=PSR2 $file";
-
-            if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {
-                $this->output->writeln("<info>Running: $command</info>");
+        if (!$process->isSuccessful()) {
+            $this->output->writeln(sprintf('<error>%s</error>', trim($process->getErrorOutput())));
+            $processOutput = $process->getOutput();
+            if (preg_match('/\bERROR\b/', $processOutput)) {
+                $exception = new ErrorException(sprintf(Constants::ERROR_MESSAGE_WRAPPER, $processOutput));
+            } else {
+                $exception = new WarningException(sprintf(Constants::WARNING_MESSAGE_WRAPPER, $processOutput));
             }
-
-            $process = new Process($command);
-            $process->run();
-
-            if (!$process->isSuccessful()) {
-                $this->output->writeln($file);
-                $this->output->writeln(sprintf('<error>%s</error>', trim($process->getErrorOutput())));
-                
-                $processOutput = $process->getOutput();
-
-                $exceptionMessage = "You do not comply PSR-2 in some PHP files.";
-                if (preg_match('/ERROR/', $processOutput)) {
-                    $exception = new ErrorException($exceptionMessage . ' Fix them before proceeding!');
-                    $messageClass = 'error';
-                } else {
-                    $exception = new WarningException($exceptionMessage);
-                    $messageClass = 'comment';
-                }
-                $this->output->writeln("<$messageClass>$processOutput</$messageClass>");
-                throw $exception;
-            }
+            throw $exception;
         }
     }
 }

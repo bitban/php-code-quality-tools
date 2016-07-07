@@ -7,38 +7,23 @@
 
 namespace Bitban\PhpCodeQualityTools\Validators;
 
-use Bitban\PhpCodeQualityTools\Interfaces\ValidatorInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
+use Bitban\PhpCodeQualityTools\Constants;
 
-class JsonValidator implements ValidatorInterface
+class JsonValidator extends AbstractValidator
 {
-    private $files;
-    private $output;
-
-    public function __construct($files, OutputInterface $output)
+    protected function getValidatorTitle()
     {
-        $this->files = $files;
-        $this->output = $output;
+        return 'Validating JSON syntax';
     }
 
-    /**
-     * @throws ErrorException
-     */
-    public function validate()
+    protected function check($file)
     {
-        $this->output->writeln('<info>Validating JSON syntax</info>');
-
-        foreach ($this->files as $file) {
-            $process = new Process("bin/jsonlint $file");
-            $process->run();
-
-            if (!$process->isSuccessful()) {
-                $this->output->writeln($file);
-                $this->output->writeln(sprintf('<error>%s</error>', trim($process->getErrorOutput())));
-
-                throw new ErrorException("You have syntax errors in JSON files. Fix them before proceeding!");
-            }
+        $process = $this->buildProcess("bin/jsonlint $file");
+        
+        $process->run();
+        
+        if (!$process->isSuccessful()) {
+            throw new ErrorException(sprintf(Constants::ERROR_MESSAGE_WRAPPER, $process->getErrorOutput()));
         }
     }
 }

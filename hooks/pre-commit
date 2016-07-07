@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-${DIR}/../../bin/php-cqtools hooks:pre-commit ${DIR}/../../
+${DIR}/../../bin/php-cqtools code:validate --commited-files ${DIR}/../../
 
 # http://stackoverflow.com/questions/3417896/how-do-i-prompt-the-user-from-within-a-commit-msg-hook
 
 OUT=$?
 
-if [ ${OUT} -eq 2 ]; then
-
-    # status code 2 from "php-cqtools hooks:pre-commit" means there are warnings
+# status code 1 from "php-cqtools code:validate" means there are warnings
+# status code 2 from "php-cqtools code:validate" means there are errors
+if [ ${OUT} -eq 1 ]; then
 
     # Allows us to read user input below, assigns stdin to keyboard
     exec < /dev/tty

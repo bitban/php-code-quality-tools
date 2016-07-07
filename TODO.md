@@ -9,13 +9,13 @@
   * <del>composer install (refactor)</del>
 * <del>post-checkout script</del>
   * <del>composer install (refactor)</del>
-* pre-commit script
+* <del>pre-commit script</del>
     * <del>PHP linter</del>
     * <del>Errors: var_dump()</del>
     * <del>Warnings: empty()</del>
     * <del>Detect not initialised variable usage (and other sniffs related to variables)</del>
     * <del>JSON linter</del>
-    * Show all errors instead of stopping on first
+    * <del>Show all errors instead of stopping on first</del>
   * <del>composer.json file commited alone</del>
   * <del>PSR-2 validation/del>
   * <del>PSR-2 fixer</del>
@@ -24,6 +24,8 @@
 ## Further improvements
 
 * <del>validate given folder (appart from commited files)</del>
+* Configure validations
+* Configure skippable paths
 * improve and simplify installation procedure
 * refactor code
 * pre-commit script
