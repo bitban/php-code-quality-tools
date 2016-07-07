@@ -84,7 +84,9 @@ Fixes code style of files according to PSR-2 recommendations.
 
 It may fix all project files or only files to be commited. This second option is very convinient to fix errors detected in pre-commit hook.
 
-`bin/php-cqtools code:fix-psr2 [--only-commited-files] <path>`
+`bin/php-cqtools code:fix-psr2 [--only-commited-files] [--dry-run]<path>`
+
+`--dry-run` option shows diffs without applying any changes to files.
 
 ### Validate Code
 

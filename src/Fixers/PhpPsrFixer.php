@@ -30,10 +30,13 @@ class PhpPsrFixer implements FixerInterface
         $this->output->writeln('<info>Fixing PHP PSR-2 compliance</info>');
 
         if ($dryRun) {
-            $this->output->write("<info>Dry run mode, no changes will be made</info>");
+            $this->output->writeln("<info>Dry run mode, no changes will be made</info>");
         }
 
         foreach ($this->files as $file) {
+
+            $this->output->writeln('<info>' . ($dryRun ? 'Analysing' : 'Fixing') . ' file ' . $file . '</info>');
+
             $command = $dryRun ?
                 "php bin/phpcs --standard=PSR2 --report-full --report-diff $file" :
                 "php bin/phpcbf --standard=PSR2 --extensions=php,inc $file";
