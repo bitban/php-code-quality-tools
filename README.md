@@ -8,10 +8,14 @@ Check command reference section for more detailed information.
 
 If you have not done this yet, add bin directory to composer.json:
 
+`composer config bin-dir bin/`
+
+It will add something like this to your composer.json file:
+
 ```json
 "config": {
     "bin-dir": "bin/"
-},
+}
 ```
 For a better experience, we also suggest to configure post-install and post-update script:
 
