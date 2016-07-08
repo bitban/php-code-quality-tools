@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-${DIR}/../../bin/php-cqtools code:validate --commited-files ${DIR}/../../
+${DIR}/../../bin/php-cqtools code:validate --only-commited-files ${DIR}/../../
 
 # http://stackoverflow.com/questions/3417896/how-do-i-prompt-the-user-from-within-a-commit-msg-hook
 
