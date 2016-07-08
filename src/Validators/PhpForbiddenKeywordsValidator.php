@@ -8,7 +8,6 @@
 namespace Bitban\PhpCodeQualityTools\Validators;
 
 use Bitban\PhpCodeQualityTools\Constants;
-use Bitban\PhpCodeQualityTools\Interfaces\ValidatorInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PhpForbiddenKeywordsValidator extends AbstractValidator
@@ -20,8 +19,8 @@ class PhpForbiddenKeywordsValidator extends AbstractValidator
         parent::__construct($files, $output);
         
         $this->forbiddenKeywords = [
-            ['code' => 'var_dump', 'message' => 'var_dump() call found', 'severity' => ValidatorInterface::SEVERITY_ERROR],
-            ['code' => 'empty', 'message' => 'empty operator found', 'severity' => ValidatorInterface::SEVERITY_WARNING],
+            ['code' => 'var_dump', 'message' => 'var_dump() call found', 'severity' => Constants::RETURN_CODE_ERROR],
+            ['code' => 'empty', 'message' => 'empty operator found', 'severity' => Constants::RETURN_CODE_WARNING]
         ];
     }
 
@@ -38,7 +37,7 @@ class PhpForbiddenKeywordsValidator extends AbstractValidator
         
         if ($process->isSuccessful()) {
             $message = $file . ': ' . $validation['message'] . "\n" . $process->getOutput();
-            if ($validation['severity'] === ValidatorInterface::SEVERITY_WARNING) {
+            if ($validation['severity'] === Constants::RETURN_CODE_WARNING) {
                 $exception = new WarningException(sprintf(Constants::WARNING_MESSAGE_WRAPPER, $message));
             } else {
                 $exception = new ErrorException(sprintf(Constants::ERROR_MESSAGE_WRAPPER, $message));

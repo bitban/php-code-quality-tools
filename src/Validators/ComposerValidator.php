@@ -7,8 +7,13 @@
 
 namespace Bitban\PhpCodeQualityTools\Validators;
 
+use Bitban\PhpCodeQualityTools\Constants;
+
 class ComposerValidator extends AbstractValidator
 {
+    /**
+     * @return int Result Code = Constants::RETURN_CODE_OK|Constants::RETURN_CODE_ERROR
+     */
     public function validate()
     {
         $this->output->writeln('<info>Validating composer files</info>');
@@ -27,9 +32,11 @@ class ComposerValidator extends AbstractValidator
         }
 
         if ($composerJsonDetected && !$composerLockDetected) {
-            throw new ErrorException('composer.lock must be committed if composer.json is modified!');
+            $this->output->writeln(sprintf(Constants::ERROR_MESSAGE_WRAPPER, 'composer.lock must be committed if composer.json is modified!'));
+            return Constants::RETURN_CODE_ERROR;
         }
-
+        
+        return Constants::RETURN_CODE_OK;
     }
 
     protected function check($file)

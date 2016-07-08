@@ -8,6 +8,7 @@
 namespace Bitban\PhpCodeQualityTools\Validators;
 
 use Bitban\PhpCodeQualityTools\Constants;
+use Bitban\PhpCodeQualityTools\Interfaces\ValidatorInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
@@ -41,15 +42,13 @@ abstract class AbstractValidator
     }
 
     /**
-     * @return int
-     * @throws WarningException
-     * @throws ErrorException
+     * @return int Result Code = Constants::RETURN_CODE_OK|Constants::RETURN_CODE_WARNING|Constants::RETURN_CODE_ERROR
      */
     public function validate()
     {
         $this->output->writeln(sprintf('<info>%s</info>', $this->getValidatorTitle()));
 
-        $returnCode = 0;
+        $returnCode = Constants::RETURN_CODE_OK;
         
         foreach ($this->files as $file) {
             if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {
