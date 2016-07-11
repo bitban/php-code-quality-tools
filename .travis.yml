@@ -4,3 +4,5 @@ php:
   - '7.0'
 install:
   - composer install
+after_success:
+  - coveralls
