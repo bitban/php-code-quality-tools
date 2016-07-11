@@ -3,6 +3,7 @@ php:
   - '5.6'
   - '7.0'
 install:
+  - mkdir -p build/logs
   - composer install
 after_success:
-  - coveralls
+  - travis_retry php bin/coveralls

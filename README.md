@@ -1,6 +1,9 @@
 # PHP Code Quality Tools
 
+[![Latest Stable Version](https://poser.pugx.org/bitban/php-code-quality-tools/v/stable)](https://packagist.org/packages/bitban/php-code-quality-tools)
+[![License](https://poser.pugx.org/bitban/php-code-quality-tools/license)](https://packagist.org/packages/bitban/php-code-quality-tools)
 [![Build Status](https://travis-ci.org/bitban/php-code-quality-tools.svg?branch=master)](https://travis-ci.org/bitban/php-code-quality-tools)
+[![Coverage Status](https://coveralls.io/repos/github/bitban/php-code-quality-tools/badge.svg?branch=master)](https://coveralls.io/github/bitban/php-code-quality-tools?branch=master)
 
 These tools may be used to detect and fix some common errors before committing them to the code repository.
 
