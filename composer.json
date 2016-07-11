@@ -20,13 +20,16 @@
       "Bitban\\PhpCodeQualityTools\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": { "Bitban\\PhpCodeQualityTools\\Tests\\": "tests/" }
+  },
   "require": {
     "composer/composer": "^1.1",
     "symfony/process": "^3.1",
     "squizlabs/php_codesniffer": "^2.6"
   },
   "require-dev": {
-
+    "phpunit/phpunit": "^5.4"
   },
   "config": {
     "bin-dir": "bin/"

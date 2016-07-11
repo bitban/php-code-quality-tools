@@ -21,10 +21,14 @@
   * <del>PSR-2 fixer</del>
     * <del>dry run</del>
 
+## Bugs
+
+* git add must be run after fixing files with code:fix-psr2
+
 ## Further improvements
 
 * <del>validate given folder (appart from commited files)</del>
-* Configure validations
+* Configure validations per project/on the fly
 * Configure skippable paths
 * improve and simplify installation procedure
 * refactor code
@@ -32,4 +36,4 @@
   * php-unit
   * code compiling
   * asset minification
-* commit-msg script
+* commit-msg hook
