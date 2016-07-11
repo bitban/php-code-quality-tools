@@ -13,20 +13,20 @@ use Bitban\PhpCodeQualityTools\Validators\JsonValidator;
 
 class JsonValidatorTest extends \PHPUnit_Framework_TestCase
 {
-    private function _testPhpSyntax($file)
+    private function _testJsonSyntax($file)
     {
         $outputInterface = new OutputInterfaceMock();
         $phpSyntaxValidator = new JsonValidator([$file], $outputInterface);
         return $phpSyntaxValidator->validate();
     }
 
-    public function testPhpSyntaxOK()
+    public function testJsonSyntaxOk()
     {
-        $returnValue = $this->_testPhpSyntax(__DIR__ . '/testcases/syntax/JsonOK.json');
+        $returnValue = $this->_testJsonSyntax(__DIR__ . '/testcases/syntax/JsonOk.json');
         $this->assertEquals(Constants::RETURN_CODE_OK, $returnValue, 'JSON file syntax is right but validator did not return OK code');
     }
 
-    public function testPhpSyntaxError()
+    public function testJsonSyntaxError()
     {
         $testFiles = [
             __DIR__ . '/testcases/syntax/JsonError_missingComma.json',
@@ -34,7 +34,7 @@ class JsonValidatorTest extends \PHPUnit_Framework_TestCase
             __DIR__ . '/testcases/syntax/JsonError_trailingComma.json'
         ];
         foreach ($testFiles as $testFile) {
-            $returnValue = $this->_testPhpSyntax($testFile);
+            $returnValue = $this->_testJsonSyntax($testFile);
             $this->assertEquals(Constants::RETURN_CODE_ERROR, $returnValue, 'JSON file syntax has errors but validator did not return ERROR code');
         }
     }

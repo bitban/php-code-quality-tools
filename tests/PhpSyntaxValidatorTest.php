@@ -20,9 +20,9 @@ class PhpSyntaxValidatorTest extends PHPUnit_Framework_TestCase
         return $phpSyntaxValidator->validate();
     }
     
-    public function testPhpSyntaxOK()
+    public function testPhpSyntaxOk()
     {
-        $returnValue = $this->_testPhpSyntax(__DIR__ . '/testcases/syntax/PhpSyntaxOK.php');
+        $returnValue = $this->_testPhpSyntax(__DIR__ . '/testcases/syntax/PhpSyntaxOk.php');
         $this->assertEquals(Constants::RETURN_CODE_OK, $returnValue, 'PHP file syntax is right but validator did not return OK code');
     }
 
