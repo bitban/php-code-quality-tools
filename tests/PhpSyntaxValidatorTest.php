@@ -16,8 +16,8 @@ class PhpSyntaxValidatorTest extends PHPUnit_Framework_TestCase
     private function _testPhpSyntax($file)
     {
         $outputInterface = new OutputInterfaceMock();
-        $phpSyntaxValidator = new PhpSyntaxValidator([$file], $outputInterface);
-        return $phpSyntaxValidator->validate();
+        $validator = new PhpSyntaxValidator([$file], $outputInterface);
+        return $validator->validate();
     }
     
     public function testPhpSyntaxOk()

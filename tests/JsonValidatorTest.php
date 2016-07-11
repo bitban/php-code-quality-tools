@@ -16,8 +16,8 @@ class JsonValidatorTest extends \PHPUnit_Framework_TestCase
     private function _testJsonSyntax($file)
     {
         $outputInterface = new OutputInterfaceMock();
-        $phpSyntaxValidator = new JsonValidator([$file], $outputInterface);
-        return $phpSyntaxValidator->validate();
+        $validator = new JsonValidator([$file], $outputInterface);
+        return $validator->validate();
     }
 
     public function testJsonSyntaxOk()

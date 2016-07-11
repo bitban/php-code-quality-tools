@@ -16,8 +16,8 @@ class PhpForbiddenKeywordsValidatorTest extends \PHPUnit_Framework_TestCase
     private function _testPhpForbiddenKeywords($file)
     {
         $outputInterface = new OutputInterfaceMock();
-        $phpSyntaxValidator = new PhpForbiddenKeywordsValidator([$file], $outputInterface);
-        return $phpSyntaxValidator->validate();
+        $validator = new PhpForbiddenKeywordsValidator([$file], $outputInterface);
+        return $validator->validate();
     }
 
     public function testPhpForbiddenKeywordsOk()

@@ -16,8 +16,8 @@ class ComposerValidatorTest extends \PHPUnit_Framework_TestCase
     private function _testComposerFiles($files)
     {
         $outputInterface = new OutputInterfaceMock();
-        $phpSyntaxValidator = new ComposerValidator($files, $outputInterface);
-        return $phpSyntaxValidator->validate();
+        $validator = new ComposerValidator($files, $outputInterface);
+        return $validator->validate();
     }
 
     public function testComposerFilesOk()
