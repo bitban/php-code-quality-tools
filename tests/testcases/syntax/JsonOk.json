@@ -1,0 +1,16 @@
+{
+  "foo": "bar",
+  "baz": "bar",
+  "bool": true,
+  "int": 4,
+  "array": [
+    {
+      "key1": "val1",
+      "key2": false
+    },
+    {
+      "key3": "val3",
+      "key4": true
+    }
+  ]
+}
