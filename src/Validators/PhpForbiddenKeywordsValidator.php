@@ -19,8 +19,8 @@ class PhpForbiddenKeywordsValidator extends AbstractValidator
         parent::__construct($files, $output);
         
         $this->forbiddenKeywords = [
-            ['code' => 'var_dump', 'message' => 'var_dump() call found', 'severity' => Constants::RETURN_CODE_ERROR],
-            ['code' => 'empty', 'message' => 'empty operator found', 'severity' => Constants::RETURN_CODE_WARNING]
+            ['code' => '^[^//].*\bvar_dump\s*\(', 'message' => 'var_dump() function call found', 'severity' => Constants::RETURN_CODE_ERROR],
+            ['code' => '^[^//].*\bempty\s*\(', 'message' => 'empty() operator found', 'severity' => Constants::RETURN_CODE_WARNING]
         ];
     }
 
@@ -31,8 +31,9 @@ class PhpForbiddenKeywordsValidator extends AbstractValidator
     
     private function checkForbiddenKeywords($file, $validation)
     {
-        $process = $this->buildProcess(sprintf('grep --fixed-strings --ignore-case -n "%s" %s', $validation['code'], $file));
-        
+        $command = sprintf('egrep -n "%s" %s', $validation['code'], $file);
+        $process = $this->buildProcess($command);
+
         $process->run();
         
         if ($process->isSuccessful()) {
