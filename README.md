@@ -1,5 +1,7 @@
 # PHP Code Quality Tools
 
+[![Build Status](https://travis-ci.org/bitban/php-code-quality-tools.svg?branch=master)](https://travis-ci.org/bitban/php-code-quality-tools)
+
 These tools may be used to detect and fix some common errors before committing them to the code repository.
 
 Check command reference section for more detailed information.
@@ -88,7 +90,7 @@ Fixes code style of files according to PSR-2 recommendations.
 
 It may fix all project files or only files to be commited. This second option is very convinient to fix errors detected in pre-commit hook.
 
-`bin/php-cqtools code:fix-psr2 [--only-commited-files] [--dry-run]<path>`
+`bin/php-cqtools code:fix-psr2 [--only-commited-files] [--dry-run] <path>`
 
 `--dry-run` option shows diffs without applying any changes to files.
 
