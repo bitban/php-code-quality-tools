@@ -23,8 +23,12 @@ abstract class FilesetManipulationCommand extends Command
     const FILE_TYPE_COMPOSER = 'composer';
 
     const ARG_PATH = 'projectPath';
+    const OPT_EXCLUDED_PATHS = 'excluded-paths';
     const OPT_ONLY_COMMITED_FILES = 'only-commited-files';
-    
+
+    const DEFAULT_EXCLUDED_PATHS = 'bin,tests,vendor';
+    const DEFAULT_BITBAN_EXCLUDED_PATHS = 'bin,compiled,frontend,packages,tests,vendor';
+
     /** @var string[][] */
     private $files = [
         self::FILE_TYPE_PHP => [],
@@ -82,11 +86,11 @@ abstract class FilesetManipulationCommand extends Command
 
     /**
      * @param string $path
-     * @param array $excluded
+     * @param string[] $excludedPaths
      * @param OutputInterface $output
      * @return \string[]
      */
-    protected function listFiles($path, $excluded, $output)
+    protected function listFiles($path, $excludedPaths, $output)
     {
         // Single file is also accepted as "path"
         if (is_file($path)) {
@@ -105,20 +109,21 @@ abstract class FilesetManipulationCommand extends Command
             ->name(Constants::PHP_FILES_REGEXP)
             ->name(Constants::JSON_FILES_REGEXP)
             ->name(Constants::COMPOSER_FILES_REGEXP)
-            ->exclude($excluded);
+            ->exclude($excludedPaths);
         return iterator_to_array($finder);
     }
 
     /**
      * @param OutputInterface $output
+     * @param string[] $excludedPaths
      * @return string[]
      */
-    protected function extractCommitFiles($output)
+    protected function extractCommitFiles($output, $excludedPaths)
     {
         $output->writeln("<info>Validating commited files</info>");
         $output->write('<info>Fetching changed files...</info>');
-        $commitFiles = new ExtractCommitedFiles();
-        $changedFiles = $commitFiles->getFiles();
+
+        $changedFiles = (new ExtractCommitedFiles())->setExcludedPaths($excludedPaths)->getFiles();
 
         $result = (count($changedFiles) > 1) ? count($changedFiles) . ' files changed' : 'No files changed';
         $output->writeln("<info>$result</info>");
@@ -161,7 +166,8 @@ abstract class FilesetManipulationCommand extends Command
     {
         $this
             ->addArgument(self::ARG_PATH, InputArgument::REQUIRED)
-            ->addOption(self::OPT_ONLY_COMMITED_FILES, null, InputOption::VALUE_NONE, 'If present, only commited files will be processed');
+            ->addOption(self::OPT_ONLY_COMMITED_FILES, null, InputOption::VALUE_NONE, 'If present, only commited files will be processed')
+            ->addOption(self::OPT_EXCLUDED_PATHS, null, InputOption::VALUE_OPTIONAL, 'If present, these paths are ignored from processing', self::DEFAULT_BITBAN_EXCLUDED_PATHS);
     }
 
     /**
@@ -180,11 +186,11 @@ abstract class FilesetManipulationCommand extends Command
      */
     protected function loadFiles(InputInterface $input, OutputInterface $output)
     {
+        $excludedPaths = explode(',', $input->getOption(self::OPT_EXCLUDED_PATHS));
         if ($input->getOption(self::OPT_ONLY_COMMITED_FILES)) {
-            $files = $this->extractCommitFiles($output);
+            $files = $this->extractCommitFiles($output, $excludedPaths);
         } else {
-            $excluded = $input->getOption(self::OPT_ONLY_COMMITED_FILES) ? ['bin', 'vendor', 'tests'] : ['vendor', 'bin'];
-            $files = $this->listFiles($input->getArgument(self::ARG_PATH), $excluded, $output);
+            $files = $this->listFiles($input->getArgument(self::ARG_PATH), $excludedPaths, $output);
         }
 
         foreach ($files as $file) {

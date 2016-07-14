@@ -93,9 +93,11 @@ Fixes code style of files according to PSR-2 recommendations.
 
 It may fix all project files or only files to be commited. This second option is very convinient to fix errors detected in pre-commit hook.
 
-`bin/php-cqtools code:fix-psr2 [--only-commited-files] [--dry-run] <path>`
+`bin/php-cqtools code:fix-psr2 [--dry-run] [--excluded-paths] [--only-commited-files] <path>`
 
 `--dry-run` option shows diffs without applying any changes to files.
+`--excluded-paths` option sets some paths not to be processed.
+`--only-commited-files` option processes only files scheduled to be commited.
 
 ### Validate Code
 
@@ -112,7 +114,8 @@ It performs several tasks:
 
 `bin/php-cqtools code:validate [--only-commited-files] <path>`
 
-It does not check files in `/bin` and `/vendor` folders. When `--only-commited-files` options is enabled, `/tests` folder is also skipped.
+`--excluded-paths` option sets some paths not to be processed.
+`--only-commited-files` option processes only files scheduled to be commited.
 
 ## References
 

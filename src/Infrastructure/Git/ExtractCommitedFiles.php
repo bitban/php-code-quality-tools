@@ -14,6 +14,9 @@ class ExtractCommitedFiles
     /** @var int */
     private $rc = 0;
 
+    /** @var string[] */
+    private $excludedPaths = [];
+
     private function execute()
     {
         exec('git rev-parse --verify HEAD 2> /dev/null', $this->output, $this->rc);
@@ -27,12 +30,33 @@ class ExtractCommitedFiles
     }
 
     /**
-     * @return array
+     * @param string[] $excludedPaths
+     * @return ExtractCommitedFiles
+     */
+    public function setExcludedPaths($excludedPaths)
+    {
+        $this->excludedPaths = $excludedPaths;
+        return $this;
+    }
+
+    /**
+     * @return string[]
      */
     public function getFiles()
     {
         $this->execute();
 
-        return $this->output;
+        $excludedPaths = $this->excludedPaths;
+        $files = array_filter($this->output, function($item) use ($excludedPaths) {
+            foreach ($excludedPaths as $excludedPath) {
+                $excludedPath = rtrim($excludedPath, '/');
+                if  (preg_match("#^$excludedPath\/#", $item)) {
+                    return false;
+                }
+            }
+            return true; 
+        });
+
+        return $files;
     }
 }
