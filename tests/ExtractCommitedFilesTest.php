@@ -13,7 +13,9 @@ class ExtractCommitedFilesTest extends \PHPUnit_Framework_TestCase
 {
     public function testExtractCommitedFiles()
     {
-        $tmpdir = sys_get_temp_dir() . uniqid();
+        // wtf "This function does not always add trailing slash. This behaviour is inconsistent across systems, so you have keep an eye on it."
+        // @see http://php.net/manual/es/function.sys-get-temp-dir.php
+        $tmpdir = rtrim(sys_get_temp_dir(), '/') . '/' . uniqid();
 
         $script = <<<COMMAND
 mkdir -p $tmpdir/dir1
