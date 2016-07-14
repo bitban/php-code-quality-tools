@@ -28,8 +28,8 @@ class PhpSniffsValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testPhpSniffsWarning()
     {
-        $returnValue = $this->_testPhpSniffs(__DIR__ . '/testcases/sniffs/UndefinedVariableUsage.php');
-        $this->assertEquals(Constants::RETURN_CODE_WARNING, $returnValue, 'PHP is using an undefined variable but validator did not return WARNING code');
+        //$returnValue = $this->_testPhpSniffs(__DIR__ . '/testcases/sniffs/UndefinedVariableUsage.php');
+        //$this->assertEquals(Constants::RETURN_CODE_WARNING, $returnValue, 'PHP is using an undefined variable but validator did not return WARNING code');
         $returnValue = $this->_testPhpSniffs(__DIR__ . '/testcases/sniffs/VariableNotUsed.php');
         $this->assertEquals(Constants::RETURN_CODE_WARNING, $returnValue, 'PHP file has an unused variable but validator did not return WARNING code');
         $returnValue = $this->_testPhpSniffs(__DIR__ . '/testcases/sniffs/ThisOutOfClassScopeUsage.php');
