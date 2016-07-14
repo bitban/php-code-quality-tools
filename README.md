@@ -87,13 +87,13 @@ It has the same behaviour than post-checkout hook.
 
 `bin/php-cqtools hooks:post-merge <projectPath>`
 
-### Fix Code Style (PSR-2)
+### Fix Code Style
 
-Fixes code style of files according to PSR-2 recommendations.
+Fixes code style of files according to Bitban's code style.
 
 It may fix all project files or only files to be commited. This second option is very convinient to fix errors detected in pre-commit hook.
 
-`bin/php-cqtools code:fix-psr2 [--dry-run] [--excluded-paths] [--only-commited-files] <path>`
+`bin/php-cqtools code:fix-codestyle [--dry-run] [--excluded-paths] [--only-commited-files] <path>`
 
 `--dry-run` option shows diffs without applying any changes to files.
 `--excluded-paths` option sets some paths not to be processed.
@@ -106,7 +106,7 @@ It performs several tasks:
 * PHP files:
   * Check for syntax errors
   * Check that forbidden functions (i.e., var_dump(), empty()) are commited
-  * Check that code complies PSR-2 style recommendations (errors cannot be commited, warnings may be)
+  * Check that code complies Bitban's code style recommendations (errors cannot be commited, warnings may be)
 * JSON files:
   * Check for syntax errors
 * Composer related files:

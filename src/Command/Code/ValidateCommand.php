@@ -11,8 +11,8 @@ use Bitban\PhpCodeQualityTools\Command\FilesetManipulationCommand;
 use Bitban\PhpCodeQualityTools\Constants;
 use Bitban\PhpCodeQualityTools\Validators\ComposerValidator;
 use Bitban\PhpCodeQualityTools\Validators\JsonValidator;
+use Bitban\PhpCodeQualityTools\Validators\PhpCodeStyleValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpForbiddenKeywordsValidator;
-use Bitban\PhpCodeQualityTools\Validators\PhpPsrValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpSniffsValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpSyntaxValidator;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,7 +57,7 @@ class ValidateCommand extends FilesetManipulationCommand
         if (true === $this->isProcessingAnyPhpFile()) {
             $validators[] = new PhpSyntaxValidator($this->getPhpFiles(), $output);
             $validators[] = new PhpForbiddenKeywordsValidator($this->getPhpFiles(), $output);
-            $validators[] = new PhpPsrValidator($this->getPhpFiles(), $output);
+            $validators[] = new PhpCodeStyleValidator($this->getPhpFiles(), $output);
             $validators[] = new PhpSniffsValidator($this->getPhpFiles(), $output);
         }
 

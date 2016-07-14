@@ -10,6 +10,8 @@ class Vegetable {
 		$this->edible = $edible;
 		$this->color = $color;
 	}
+
+	// This line has a          commment tooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo wide
     
 	function is_edible() {
 		return $this->edible;

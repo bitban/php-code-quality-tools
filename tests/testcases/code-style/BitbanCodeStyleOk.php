@@ -3,7 +3,7 @@
 namespace Bitban;
 
 // base class with member properties and methods
-class Psr2CodeStyleOk
+class BitbanCodeStyleOk
 {
     private $edible;
     protected $color;

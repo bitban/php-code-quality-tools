@@ -7,7 +7,7 @@
 
 namespace Bitban\PhpCodeQualityTools\Console;
 
-use Bitban\PhpCodeQualityTools\Command\Code\FixPsr2Command;
+use Bitban\PhpCodeQualityTools\Command\Code\FixCodeStyleCommand;
 use Bitban\PhpCodeQualityTools\Command\Code\ValidateCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\CheckCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\InstallCommand;
@@ -29,7 +29,7 @@ class Application extends BaseApplication
             new PostCheckoutCommand(),
             new PostMergeCommand(),
 
-            new FixPsr2Command(),
+            new FixCodeStyleCommand(),
             new ValidateCommand()
         ]);
     }

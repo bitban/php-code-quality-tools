@@ -8,16 +8,16 @@
 namespace Bitban\PhpCodeQualityTools\Command\Code;
 
 use Bitban\PhpCodeQualityTools\Command\FilesetManipulationCommand;
-use Bitban\PhpCodeQualityTools\Fixers\PhpPsrFixer;
+use Bitban\PhpCodeQualityTools\Fixers\PhpCodeStyleFixer;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class FixPsr2Command extends FilesetManipulationCommand
+class FixCodeStyleCommand extends FilesetManipulationCommand
 {
-    const COMMAND_NAME = 'code:fix-psr2';
-    const COMMAND_DESCRIPTION = 'Fixes PHP code style according to PSR-2 rules';
-    const COMMAND_HELP = 'Fixes code style of files according to PSR-2 recommendations. It may fix all project files or only files to be commited.';
+    const COMMAND_NAME = 'code:fix-codestyle';
+    const COMMAND_DESCRIPTION = 'Fixes PHP code style according to Bitban\'s code style';
+    const COMMAND_HELP = 'Fixes code style of files according to Bitban\'s code style recommendations. It may fix all project files or only files to be commited.';
     const OPT_DRY_RUN = 'dry-run';
 
     protected function configure()
@@ -33,6 +33,6 @@ class FixPsr2Command extends FilesetManipulationCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);
-        (new PhpPsrFixer($this->getPhpFiles(), $output))->fix($input->getOption(self::OPT_DRY_RUN));
+        (new PhpCodeStyleFixer($this->getPhpFiles(), $output))->fix($input->getOption(self::OPT_DRY_RUN));
     }
 }

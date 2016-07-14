@@ -9,7 +9,7 @@ namespace Bitban\PhpCodeQualityTools\Validators;
 
 use Bitban\PhpCodeQualityTools\Constants;
 
-class PhpPsrValidator extends AbstractValidator
+class PhpCodeStyleValidator extends AbstractValidator
 {
     protected function getValidatorTitle()
     {
@@ -18,7 +18,8 @@ class PhpPsrValidator extends AbstractValidator
 
     protected function check($file)
     {
-        $process = $this->buildProcess("php bin/phpcs --standard=PSR2 $file");
+        $ruleset = realpath(__DIR__ . '/../../rulesets/bitban.xml');
+        $process = $this->buildProcess("php bin/phpcs --standard=$ruleset $file");
         
         $process->run();
 

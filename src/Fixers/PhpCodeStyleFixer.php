@@ -11,7 +11,7 @@ use Bitban\PhpCodeQualityTools\Interfaces\FixerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-class PhpPsrFixer implements FixerInterface
+class PhpCodeStyleFixer implements FixerInterface
 {
     private $files;
     private $output;
@@ -27,7 +27,7 @@ class PhpPsrFixer implements FixerInterface
      */
     public function fix($dryRun = false)
     {
-        $this->output->writeln('<info>Fixing PHP PSR-2 compliance</info>');
+        $this->output->writeln('<info>Fixing PHP code style compliance</info>');
 
         if ($dryRun) {
             $this->output->writeln("<info>Dry run mode, no changes will be made</info>");
@@ -37,9 +37,10 @@ class PhpPsrFixer implements FixerInterface
 
             $this->output->writeln('<info>' . ($dryRun ? 'Analysing' : 'Fixing') . ' file ' . $file . '</info>');
 
+            $ruleset = realpath(__DIR__ . '/../../rulesets/bitban.xml');
             $command = $dryRun ?
-                "php bin/phpcs --standard=PSR2 --report-full --report-diff $file" :
-                "php bin/phpcbf --standard=PSR2 --extensions=php,inc $file";
+                "php bin/phpcs --standard=$ruleset --report-full --report-diff $file" :
+                "php bin/phpcbf --standard=$ruleset --extensions=php,inc $file";
 
             if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {
                 $this->output->writeln("<info>Running: $command</info>");

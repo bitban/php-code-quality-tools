@@ -23,11 +23,12 @@
 
 ## Bugs
 
-* git add must be run after fixing files with code:fix-psr2
+* git add must be run after fixing files with code:fix-codestyle
 
 ## Further improvements
 
 * <del>validate given folder (appart from commited files)</del>
+* Add support for custom codestyles
 * Configure validations per project/on the fly
 * Configure skippable paths
 * improve and simplify installation procedure
