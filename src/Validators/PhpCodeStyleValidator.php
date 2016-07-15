@@ -13,7 +13,7 @@ class PhpCodeStyleValidator extends AbstractValidator
 {
     protected function getValidatorTitle()
     {
-        return 'Validating PHP PSR-2 compliance';
+        return 'Validating PHP code style compliance';
     }
 
     protected function check($file)

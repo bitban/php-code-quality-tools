@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<ruleset name="Custom">
+ <description>A collection of custom sniffs.</description>
+</ruleset>
