@@ -27,11 +27,9 @@ For a better experience, we also suggest to configure post-install and post-upda
 ```json
 "scripts": {
     "post-install-cmd": [
-        "Bitban\\PhpCodeQualityTools\\Composer\\ScriptHandler::checkSniffs",
         "Bitban\\PhpCodeQualityTools\\Composer\\ScriptHandler::checkHooks"
     ],
     "post-update-cmd": [
-        "Bitban\\PhpCodeQualityTools\\Composer\\ScriptHandler::checkSniffs",
         "Bitban\\PhpCodeQualityTools\\Composer\\ScriptHandler::checkHooks"
     ]
 }
@@ -112,7 +110,7 @@ It performs several tasks:
 * Composer related files:
   * Check that composer.json is not commited without composer.lock (checked only with --only-commited-files modifier)
 
-`bin/php-cqtools code:validate [--only-commited-files] <path>`
+`bin/php-cqtools code:validate [--excluded-paths] [--only-commited-files] <path>`
 
 `--excluded-paths` option sets some paths not to be processed.
 `--only-commited-files` option processes only files scheduled to be commited.
