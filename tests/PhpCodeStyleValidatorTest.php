@@ -24,6 +24,8 @@ class PhpPsrValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $returnValue = $this->_testPhpSniffs(__DIR__ . '/testcases/code-style/BitbanCodeStyleOk.php');
         $this->assertEquals(Constants::RETURN_CODE_OK, $returnValue, 'PHP file code style is right but validator did not return OK code ' . $returnValue);
+        $returnValue = $this->_testPhpSniffs(__DIR__ . '/testcases/code-style/BitbanCodeStyleWithAllowedBlankLines.php');
+        $this->assertEquals(Constants::RETURN_CODE_OK, $returnValue, 'PHP file has allowed blank lines but validator did not return OK code ' . $returnValue);
     }
 
     public function testPhpPsrValidatorError()
