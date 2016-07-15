@@ -1,4 +1,7 @@
 <?xml version="1.0"?>
 <ruleset name="Custom">
- <description>A collection of custom sniffs.</description>
+    <description>A collection of custom sniffs.</description>
+    <rule ref="Custom.CodeAnalysis.VariableAnalysis">
+        <exclude-pattern>*.inc</exclude-pattern>
+    </rule>
 </ruleset>

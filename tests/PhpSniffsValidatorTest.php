@@ -24,6 +24,8 @@ class PhpSniffsValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $returnValue = $this->_testPhpSniffs(__DIR__ . '/testcases/sniffs/VariableUsageOk.php');
         $this->assertEquals(Constants::RETURN_CODE_OK, $returnValue, 'PHP variable usage is right but validator did not return OK code ' . $returnValue);
+        $returnValue = $this->_testPhpSniffs(__DIR__ . '/testcases/sniffs/UndefinedVariableUsage.inc');
+        $this->assertEquals(Constants::RETURN_CODE_OK, $returnValue, 'PHP variable usage should be skipped for .inc files but validator did not return OK code ' . $returnValue);
     }
 
     public function testPhpSniffsWarning()
