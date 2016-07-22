@@ -8,9 +8,29 @@
 namespace Bitban\PhpCodeQualityTools\Validators;
 
 use Bitban\PhpCodeQualityTools\Constants;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class PhpCodeStyleValidator extends AbstractValidator
 {
+    protected $customRuleset;
+
+    /**
+     * PhpCodeStyleValidator constructor.
+     * @param array $files
+     * @param OutputInterface $output
+     * @param string $customRuleset
+     */
+    public function __construct(array $files, OutputInterface $output, $customRuleset)
+    {
+        parent::__construct($files, $output);
+        $this->customRuleset = $customRuleset;
+    }
+
+    protected function getRulesetPath()
+    {
+        return realpath(($this->customRuleset !== null) ?$this->customRuleset : __DIR__ . '/../../rulesets/bitban.xml');
+    }
+
     protected function getValidatorTitle()
     {
         return 'Validating PHP code style compliance';
@@ -18,7 +38,7 @@ class PhpCodeStyleValidator extends AbstractValidator
 
     protected function check($file)
     {
-        $ruleset = realpath(__DIR__ . '/../../rulesets/bitban.xml');
+        $ruleset = $this->getRulesetPath();
         $process = $this->buildProcess("php bin/phpcs --standard=$ruleset $file");
         
         $process->run();

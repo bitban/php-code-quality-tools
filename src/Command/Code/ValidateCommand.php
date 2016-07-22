@@ -16,6 +16,7 @@ use Bitban\PhpCodeQualityTools\Validators\PhpForbiddenKeywordsValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpSniffsValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpSyntaxValidator;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ValidateCommand extends FilesetManipulationCommand
@@ -25,6 +26,7 @@ class ValidateCommand extends FilesetManipulationCommand
     const COMMAND_HELP = 'Performs all code validations across files in given path.';
     const ARG_PATH = 'projectPath';
     const OPT_ONLY_COMMITED_FILES = 'only-commited-files';
+    const OPT_CUSTOM_RULESET = 'custom-ruleset';
 
     protected function configure()
     {
@@ -32,7 +34,8 @@ class ValidateCommand extends FilesetManipulationCommand
         $this
             ->setName(self::COMMAND_NAME)
             ->setDescription(self::COMMAND_DESCRIPTION)
-            ->setHelp(self::COMMAND_HELP);
+            ->setHelp(self::COMMAND_HELP)
+            ->addOption(self::OPT_CUSTOM_RULESET, null, InputOption::VALUE_OPTIONAL, 'If present, uses PHP Code Sniffer custom ruleset');;
     }
 
     /**
