@@ -94,14 +94,14 @@ abstract class FilesetManipulationCommand extends Command
     {
         // Single file is also accepted as "path"
         if (is_file($path)) {
-            $output->writeln("<info>Validating $path</info>");
+            $output->writeln("<info>Processing $path</info>");
             return [$path];
         }
 
         // Remove trailing slash if present
         $path = rtrim($path, '/');
 
-        $output->writeln("<info>Validating files in $path</info>");
+        $output->writeln("<info>Processing files in $path</info>");
         $finder = new Finder();
         $finder
             ->files()
@@ -120,7 +120,7 @@ abstract class FilesetManipulationCommand extends Command
      */
     protected function extractCommitFiles($output, $excludedPaths)
     {
-        $output->writeln("<info>Validating commited files</info>");
+        $output->writeln("<info>Processing commited files</info>");
         $output->write('<info>Fetching changed files...</info>');
 
         $changedFiles = (new ExtractCommitedFiles())->setExcludedPaths($excludedPaths)->getFiles();

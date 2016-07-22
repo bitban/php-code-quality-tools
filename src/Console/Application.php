@@ -7,6 +7,7 @@
 
 namespace Bitban\PhpCodeQualityTools\Console;
 
+use Bitban\PhpCodeQualityTools\Command\Code\CustomFixCommand;
 use Bitban\PhpCodeQualityTools\Command\Code\FixCodeStyleCommand;
 use Bitban\PhpCodeQualityTools\Command\Code\ValidateCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\CheckCommand;
@@ -35,7 +36,8 @@ class Application extends BaseApplication
             new UninstallCommand(),
 
             new FixCodeStyleCommand(),
-            new ValidateCommand()
+            new ValidateCommand(),
+            new CustomFixCommand()
         ]);
     }
 }
