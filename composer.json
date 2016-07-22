@@ -34,9 +34,6 @@
   },
   "config": {
     "bin-dir": "bin/",
-    "platform": {
-      "php": "5.4.45"
-    },
     "optimize-autoloader": true,
     "preferred-install": {
       "*": "dist"
