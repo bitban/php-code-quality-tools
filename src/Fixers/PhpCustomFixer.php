@@ -82,8 +82,12 @@ class PhpCustomFixer implements FixerInterface
         }
 
         foreach ($this->files as $file) {
-            $this->output->writeln('<info>' . ($dryRun ? 'Analysing' : 'Fixing') . ' file ' . $file . '</info>');
             $fixers = $this->getFixers($file);
+            if (count($fixers) === 0) {
+                continue;
+            }
+
+            $this->output->writeln('<info>' . ($dryRun ? 'Analysing' : 'Fixing') . ' file ' . $file . '</info>');
             $fixedFile = $this->applyFixers($fixers, $file);
 
             if ($dryRun) {
