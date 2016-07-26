@@ -24,8 +24,9 @@ class PhpCodeStyleFixer implements FixerInterface
 
     /**
      * @param bool $dryRun
+     * @param bool $gitReAdd
      */
-    public function fix($dryRun = false)
+    public function fix($dryRun = false, $gitReAdd = false)
     {
         $this->output->writeln('<info>Fixing PHP code style compliance</info>');
 
@@ -52,6 +53,10 @@ class PhpCodeStyleFixer implements FixerInterface
                 $process->setTty(true);
             }
             $process->run();
+
+            if ($gitReAdd) {
+                (new Process("git add $file"))->run();
+            }
         }
     }
 }

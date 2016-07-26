@@ -33,6 +33,7 @@ class FixCodeStyleCommand extends FilesetManipulationCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);
-        (new PhpCodeStyleFixer($this->getPhpFiles(), $output))->fix($input->getOption(self::OPT_DRY_RUN));
+        (new PhpCodeStyleFixer($this->getPhpFiles(), $output))
+            ->fix($input->getOption(self::OPT_DRY_RUN), $input->getOption(self::OPT_ONLY_COMMITED_FILES));
     }
 }

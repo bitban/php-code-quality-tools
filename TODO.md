@@ -23,7 +23,7 @@
 
 ## Bugs
 
-* git add must be run after fixing files with code:fix-codestyle
+* <del>git add must be run after fixing files with code:fix-codestyle</del>
 
 ## Further improvements
 
