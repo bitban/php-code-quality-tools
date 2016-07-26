@@ -11,11 +11,13 @@ use Bitban\PhpCodeQualityTools\Infrastructure\Git\ExtractCommitedFiles;
 
 class ExtractCommitedFilesTest extends \PHPUnit_Framework_TestCase
 {
+    use TempFilesTrait;
+
     public function testExtractCommitedFiles()
     {
         // wtf "This function does not always add trailing slash. This behaviour is inconsistent across systems, so you have keep an eye on it."
         // @see http://php.net/manual/es/function.sys-get-temp-dir.php
-        $tmpdir = rtrim(sys_get_temp_dir(), '/') . '/' . uniqid();
+        $tmpdir = $this->tmpdir;
 
         $script = <<<COMMAND
 mkdir -p $tmpdir/dir1
@@ -37,7 +39,7 @@ git add $tmpdir/dir3/file5
 COMMAND;
         exec($script);
 
-        chdir($tmpdir);        
+        chdir($tmpdir);
         $extractor = new ExtractCommitedFiles();
         $extractor->setExcludedPaths(['dir2']);
         $files = $extractor->getFiles();
@@ -46,11 +48,5 @@ COMMAND;
         $this->assertFalse(in_array('dir2/file3', $files));
         $this->assertFalse(in_array('dir2/file4', $files));
         $this->assertTrue(in_array('dir3/file5', $files));
-        
-        $script = <<<COMMAND
-rm -rf $tmpdir
-COMMAND;
-        exec($script);
-
     }
 }

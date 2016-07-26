@@ -7,16 +7,17 @@
 
 namespace Bitban\PhpCodeQualityTools\Tests;
 
-
 use Bitban\PhpCodeQualityTools\Constants;
 use Bitban\PhpCodeQualityTools\Validators\PhpCodeStyleValidator;
 
 class PhpPsrValidatorTest extends \PHPUnit_Framework_TestCase
 {
+    use TempFilesTrait;
+
     private function _testPhpSniffs($file)
     {
         $outputInterface = new OutputInterfaceMock();
-        $validator = new PhpCodeStyleValidator([$file], $outputInterface);
+        $validator = new PhpCodeStyleValidator([$file], $this->tmpdir, $outputInterface);
         return $validator->validate();
     }
 

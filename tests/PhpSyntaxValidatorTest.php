@@ -13,10 +13,12 @@ use PHPUnit_Framework_TestCase;
 
 class PhpSyntaxValidatorTest extends PHPUnit_Framework_TestCase
 {
+    use TempFilesTrait;
+
     private function _testPhpSyntax($file)
     {
         $outputInterface = new OutputInterfaceMock();
-        $validator = new PhpSyntaxValidator([$file], $outputInterface);
+        $validator = new PhpSyntaxValidator([$file], $this->tmpdir, $outputInterface);
         return $validator->validate();
     }
     

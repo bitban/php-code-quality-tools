@@ -14,9 +14,9 @@ class PhpForbiddenKeywordsValidator extends AbstractValidator
 {
     protected $forbiddenKeywords;
 
-    public function __construct($files, OutputInterface $output)
+    public function __construct($files, $basePath, OutputInterface $output)
     {
-        parent::__construct($files, $output);
+        parent::__construct($files, $basePath, $output);
         
         $this->forbiddenKeywords = [
             ['code' => '^[^//].*\bvar_dump\s*\(', 'message' => 'var_dump() function call found', 'severity' => Constants::RETURN_CODE_ERROR],

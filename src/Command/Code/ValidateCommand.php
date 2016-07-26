@@ -48,21 +48,23 @@ class ValidateCommand extends FilesetManipulationCommand
 
         $validators = [];
 
+        $projectPath = $input->getArgument(self::ARG_PATH);
+
         if (true === $this->isProcessingAnyComposerFile()) {
             if ($input->getOption(self::OPT_ONLY_COMMITED_FILES)) {
-                $validators[] = new ComposerValidator($this->getComposerFiles(), $output);
+                $validators[] = new ComposerValidator($this->getComposerFiles(), $projectPath, $output);
             }
         }
 
         if (true === $this->isProcessingAnyPhpFile()) {
-            $validators[] = new PhpSyntaxValidator($this->getPhpFiles(), $output);
-            $validators[] = new PhpForbiddenKeywordsValidator($this->getPhpFiles(), $output);
-            $validators[] = new PhpCodeStyleValidator($this->getPhpFiles(), $output);
-            $validators[] = new PhpSniffsValidator($this->getPhpFiles(), $output);
+            $validators[] = new PhpSyntaxValidator($this->getPhpFiles(), $projectPath, $output);
+            $validators[] = new PhpForbiddenKeywordsValidator($this->getPhpFiles(), $projectPath, $output);
+            $validators[] = new PhpCodeStyleValidator($this->getPhpFiles(), $projectPath, $output);
+            $validators[] = new PhpSniffsValidator($this->getPhpFiles(), $projectPath, $output);
         }
 
         if (true === $this->isProcessingAnyJsonFile()) {
-            $validators[] = new JsonValidator($this->getJsonFiles(), $output);
+            $validators[] = new JsonValidator($this->getJsonFiles(), $projectPath, $output);
         }
 
         foreach ($validators as $validator) {

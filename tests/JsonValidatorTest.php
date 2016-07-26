@@ -13,10 +13,12 @@ use Bitban\PhpCodeQualityTools\Validators\JsonValidator;
 
 class JsonValidatorTest extends \PHPUnit_Framework_TestCase
 {
+    use TempFilesTrait;
+
     private function _testJsonSyntax($file)
     {
         $outputInterface = new OutputInterfaceMock();
-        $validator = new JsonValidator([$file], $outputInterface);
+        $validator = new JsonValidator([$file], $this->tmpdir, $outputInterface);
         return $validator->validate();
     }
 

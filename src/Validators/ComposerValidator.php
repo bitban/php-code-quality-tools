@@ -11,6 +11,12 @@ use Bitban\PhpCodeQualityTools\Constants;
 
 class ComposerValidator extends AbstractValidator
 {
+    private function projectIsLibrary()
+    {
+        $composer = json_decode(file_get_contents($this->basePath . '/composer.json'), true);
+        return $composer['type'] === 'library';
+    }
+
     /**
      * @return int Result Code = Constants::RETURN_CODE_OK|Constants::RETURN_CODE_ERROR
      */
@@ -31,7 +37,7 @@ class ComposerValidator extends AbstractValidator
             }
         }
 
-        if ($composerJsonDetected && !$composerLockDetected) {
+        if ($composerJsonDetected && !$composerLockDetected && !$this->projectIsLibrary()) {
             $this->output->writeln(sprintf(Constants::ERROR_MESSAGE_WRAPPER, 'composer.lock must be committed if composer.json is modified!'));
             return Constants::RETURN_CODE_ERROR;
         }

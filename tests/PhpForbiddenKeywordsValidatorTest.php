@@ -13,10 +13,12 @@ use Bitban\PhpCodeQualityTools\Validators\PhpForbiddenKeywordsValidator;
 
 class PhpForbiddenKeywordsValidatorTest extends \PHPUnit_Framework_TestCase
 {
+    use TempFilesTrait;
+
     private function _testPhpForbiddenKeywords($file)
     {
         $outputInterface = new OutputInterfaceMock();
-        $validator = new PhpForbiddenKeywordsValidator([$file], $outputInterface);
+        $validator = new PhpForbiddenKeywordsValidator([$file], $this->tmpdir, $outputInterface);
         return $validator->validate();
     }
 

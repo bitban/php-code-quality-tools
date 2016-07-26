@@ -14,6 +14,8 @@ use Symfony\Component\Process\Process;
 
 abstract class AbstractValidator
 {
+    /** @var string */
+    protected $basePath;
     /** @var string[] */
     protected $files;
     /** @var OutputInterface */
@@ -21,11 +23,13 @@ abstract class AbstractValidator
 
     /**
      * @param string[] $files
+     * @param string $basePath
      * @param OutputInterface $output
      */
-    public function __construct($files, OutputInterface $output)
+    public function __construct($files, $basePath, OutputInterface $output)
     {
         $this->files = $files;
+        $this->basePath = $basePath;
         $this->output = $output;
     }
 

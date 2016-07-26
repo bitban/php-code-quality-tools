@@ -13,10 +13,12 @@ use Bitban\PhpCodeQualityTools\Validators\PhpSniffsValidator;
 
 class PhpSniffsValidatorTest extends \PHPUnit_Framework_TestCase
 {
+    use TempFilesTrait;
+
     private function _testPhpSniffs($file)
     {
         $outputInterface = new OutputInterfaceMock();
-        $validator = new PhpSniffsValidator([$file], $outputInterface);
+        $validator = new PhpSniffsValidator([$file], $this->tmpdir, $outputInterface);
         return $validator->validate();
     }
 

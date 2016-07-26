@@ -47,14 +47,14 @@ class ExtractCommitedFiles
         $this->execute();
 
         $excludedPaths = $this->excludedPaths;
-        $files = array_filter($this->output, function($item) use ($excludedPaths) {
+        $files = array_filter($this->output, function ($item) use ($excludedPaths) {
             foreach ($excludedPaths as $excludedPath) {
                 $excludedPath = rtrim($excludedPath, '/');
-                if  (preg_match("#^$excludedPath\/#", $item)) {
+                if (preg_match("#^$excludedPath\/#", $item)) {
                     return false;
                 }
             }
-            return true; 
+            return true;
         });
 
         return $files;
