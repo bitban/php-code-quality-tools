@@ -21,16 +21,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Application extends BaseApplication
 {
     const APP_NAME = 'Bitban Technologies PHP Code Quality Tools';
-
-    private $localVersion;
-    private $remoteVersion;
+    const APP_VERSION = '0.9.7';
 
     public function __construct()
     {
-        $this->remoteVersion = exec('git describe `git remote` --abbrev=0 --tags');
-        $this->localVersion = exec('git describe --abbrev=0 --tags');
-
-        parent::__construct(self::APP_NAME, trim($this->localVersion, 'v'));
+        parent::__construct(self::APP_NAME, self::APP_VERSION);
 
         $this->addCommands([
             new CheckCommand(),
@@ -42,19 +37,5 @@ class Application extends BaseApplication
             new FixCodeStyleCommand(),
             new ValidateCommand()
         ]);
-    }
-
-    private function checkVersion(OutputInterface $output)
-    {
-        $versionDiff = version_compare($this->remoteVersion, $this->localVersion);
-        if ($versionDiff > 0) {
-            $output->writeln("\n<error>You don't have the latest version of Php Code Quality Tools. Please update to $this->remoteVersion.</error>\n");
-        }
-    }
-
-    public function doRun(InputInterface $input, OutputInterface $output)
-    {
-        $this->checkVersion($output);
-        return parent::doRun($input, $output);
     }
 }
