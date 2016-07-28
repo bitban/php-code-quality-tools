@@ -85,6 +85,12 @@ It has the same behaviour than post-checkout hook.
 
 `bin/php-cqtools hooks:post-merge <projectPath>`
 
+### Uninstall Git Hooks
+
+Removes Git hooks from destination path. If backup files exist, they are restored.
+
+`bin/php-cqtools hooks:uninstall`
+
 ### Fix Code Style
 
 Fixes code style of files according to Bitban's code style.

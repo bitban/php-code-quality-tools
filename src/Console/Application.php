@@ -13,6 +13,7 @@ use Bitban\PhpCodeQualityTools\Command\GitHooks\CheckCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\InstallCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\PostCheckoutCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\PostMergeCommand;
+use Bitban\PhpCodeQualityTools\Command\GitHooks\UninstallCommand;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,6 +37,7 @@ class Application extends BaseApplication
             new InstallCommand(),
             new PostCheckoutCommand(),
             new PostMergeCommand(),
+            new UninstallCommand(),
 
             new FixCodeStyleCommand(),
             new ValidateCommand()
