@@ -13,6 +13,34 @@ use PHPUnit_Framework_TestCase;
 
 class HookManagerTest extends PHPUnit_Framework_TestCase
 {
+    public function testHookInstall()
+    {
+        $basePath = vfsStream::setup();
+        $hookManager = new HookManager();
+
+        $hookManager->installHooks($basePath->url());
+
+        $this->assertTrue($basePath->hasChild('pre-commit'), 'pre-commit hook is not present');
+        $this->assertTrue($basePath->hasChild('post-merge'), 'post-merge hook is not present');
+        $this->assertTrue($basePath->hasChild('post-checkout'), 'post-checkout hook is not present');
+    }
+
+    public function testHookInstallWithBackups()
+    {
+        $basePath = vfsStream::setup();
+        $hookManager = new HookManager();
+
+        $basePath->addChild(vfsStream::newFile('pre-commit'));
+
+        $hookManager->installHooks($basePath->url());
+
+        $this->assertTrue($basePath->hasChild('pre-commit'), 'pre-commit hook is not present');
+        $this->assertTrue($basePath->hasChild('post-merge'), 'post-merge hook is not present');
+        $this->assertTrue($basePath->hasChild('post-checkout'), 'post-checkout hook is not present');
+        $this->assertTrue($basePath->hasChild('pre-commit.' . HookManager::BACKUP_FILE_EXTENSION), 'pre-commit hook has not been backed up');
+    }
+
+
     public function testHookUninstall()
     {
         $basePath = vfsStream::setup();
@@ -24,9 +52,9 @@ class HookManagerTest extends PHPUnit_Framework_TestCase
 
         $hookManager->uninstallHooks($basePath->url());
 
-        $this->assertFalse($basePath->hasChild('pre-commit'));
-        $this->assertFalse($basePath->hasChild('post-merge'));
-        $this->assertFalse($basePath->hasChild('post-checkout'));
+        $this->assertFalse($basePath->hasChild('pre-commit'), 'pre-commit hook is still present');
+        $this->assertFalse($basePath->hasChild('post-merge'), 'post-merge hook is still present');
+        $this->assertFalse($basePath->hasChild('post-checkout'), 'post-checkout hook is still present');
     }
 
     public function testHookUninstallRestoreBackups()
@@ -41,8 +69,8 @@ class HookManagerTest extends PHPUnit_Framework_TestCase
 
         $hookManager->uninstallHooks($basePath->url());
 
-        $this->assertTrue($basePath->hasChild('pre-commit'));
-        $this->assertFalse($basePath->hasChild('post-merge'));
-        $this->assertFalse($basePath->hasChild('post-checkout'));
+        $this->assertTrue($basePath->hasChild('pre-commit'), 'pre-commit hook backup has not been restored');
+        $this->assertFalse($basePath->hasChild('post-merge'), 'post-merge hook is still present');
+        $this->assertFalse($basePath->hasChild('post-checkout'), 'post-checkout hook is still present');
     }
 }

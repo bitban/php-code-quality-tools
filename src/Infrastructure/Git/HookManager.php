@@ -81,6 +81,71 @@ class HookManager
         return exec('git rev-parse --show-toplevel') . '/.git/hooks';
     }
 
+    private function getHooksSourcePath()
+    {
+        return realpath(__DIR__ . '/../../../hooks');
+    }
+
+    private function backupHook($destinationFile)
+    {
+        if ($this->filesystem->exists($destinationFile)) {
+            $this->filesystem->rename($destinationFile, $destinationFile . '.' . self::BACKUP_FILE_EXTENSION);
+            $this->outputWriteln(" <info>Backing up $destinationFile</info>", true);
+        }
+    }
+
+    private function restoreHook($backupFile)
+    {
+        $sourceFile = str_replace('.' . self::BACKUP_FILE_EXTENSION, '', $backupFile);
+        $this->filesystem->rename($backupFile, $sourceFile);
+        $this->outputWriteln(" <info>Restoring $backupFile</info>", true);
+    }
+
+    public function installHooks($gitHooksPath)
+    {
+        $hooksSourcePath = $this->getHooksSourcePath();
+        try {
+
+            if (!$this->filesystem->exists($gitHooksPath)) {
+                $this->filesystem->mkdir($gitHooksPath);
+            }
+
+            $hooks = [];
+            foreach (new \DirectoryIterator($hooksSourcePath) as $hook) {
+                if ($hook->isDot()) {
+                    continue;
+                }
+                $hooks[] = $hook->getFilename();
+            }
+
+            $this->progressBarInit(count($hooks));
+
+            foreach ($hooks as $hook) {
+                $sourceFile = $hooksSourcePath . '/' . $hook;
+                $destinationFile = $gitHooksPath . '/' . $hook;
+
+                $this->backupHook($destinationFile);
+
+                $this->filesystem->copy($sourceFile, $destinationFile, true);
+                $this->filesystem->chmod($destinationFile, 0755);
+
+                $this->progressBarAdvance();
+
+                $this->outputWriteln(" <info>Copying $sourceFile to $destinationFile</info>", true);
+            }
+
+            $this->progressBarFinish();
+
+            $this->outputWriteln('');
+            $this->outputWriteln(sprintf('<info>Hooks installed succesfully %s</info>', Constants::CHARACTER_THUMB_UP));
+        } catch (\Exception $e) {
+            $this->outputWriteln(" <error>" . $e->getMessage() . " Aborting</error>");
+            return 1;
+        }
+
+        return 0;
+    }
+
     /**
      * @param string $gitHooksPath
      * @return int
@@ -108,20 +173,17 @@ class HookManager
                 $this->filesystem->remove($sourceFile);
 
                 $this->progressBarAdvance();
-                $this->outputWriteln(" <info>Removed $sourceFile</info>", true);
+                $this->outputWriteln(" <info>Removing $sourceFile</info>", true);
             }
 
             foreach ($backups as $backup) {
-                $sourceFile = str_replace('.bak', '', $backup);
-                $this->filesystem->rename($backup, $sourceFile);
-
+                $this->restoreHook($backup);
                 $this->progressBarAdvance();
-                $this->outputWriteln(" <info>Restored $sourceFile from backup</info>", true);
             }
 
             $this->progressBarFinish();
             $this->outputWriteln('');
-            $this->outputWriteln(sprintf('<info>Hooks removed succesfully %s</info>', Constants::CHARACTER_THUMB_UP));
+            $this->outputWriteln(sprintf('<info>Hooks uninstalled succesfully %s</info>', Constants::CHARACTER_THUMB_UP));
         } catch (\Exception $e) {
             $this->outputWriteln(" <error>" . $e->getMessage() . " Aborting</error>");
             return 1;
