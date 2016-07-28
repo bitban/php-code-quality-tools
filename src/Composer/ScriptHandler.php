@@ -8,8 +8,6 @@
 namespace Bitban\PhpCodeQualityTools\Composer;
 
 use Composer\Script\Event;
-use Symfony\Component\Console\Exception\RuntimeException;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
@@ -20,7 +18,7 @@ class ScriptHandler
      */
     public static function checkHooks(Event $event)
     {
-        // bin/php-cqtools hooks:check <sourcePath> <destinationPath> <projectPath>
+        // bin/php-cqtools hooks:check
 
         $options = self::getOptions($event);
         
@@ -36,7 +34,7 @@ class ScriptHandler
             $console .= ' --ansi';
         }
 
-        $command = join(' ', [$console, $cmd, $projectPath, '--skip-ok']);
+        $command = join(' ', [$console, $cmd, '--skip-ok']);
         $process = new Process($php . ($phpArgs ? ' ' . $phpArgs : '') . ' ' . $command, null, null, null, $timeout);
         $process->run(function ($type, $buffer) use ($event) {
             $event->getIO()->write($buffer, false);
