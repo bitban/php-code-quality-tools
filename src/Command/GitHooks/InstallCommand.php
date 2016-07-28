@@ -29,7 +29,10 @@ class InstallCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $hookManager = new HookManager($output, new ProgressBar($output));
-        $hookManager->installHooks(HookManager::getHooksPath());
+        $hookManager = HookManager::getDefaultInstance()
+            ->setOutput($output)
+            ->setProgressBar(new ProgressBar($output));
+
+        return $hookManager->installHooks();
     }
 }

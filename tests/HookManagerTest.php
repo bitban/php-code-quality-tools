@@ -5,72 +5,141 @@
  * Todos los derechos reservados.
  */
 
-namespace Bitban\PhpCodeQualityTools\Tests;
+namespace Bitban\PhpCodeQualityTools;
 
+use Bitban\PhpCodeQualityTools\Infrastructure\Git\GitHelper;
 use Bitban\PhpCodeQualityTools\Infrastructure\Git\HookManager;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit_Framework_TestCase;
 
 class HookManagerTest extends PHPUnit_Framework_TestCase
 {
+    /** @var vfsStreamDirectory */
+    private $basePath;
+
+    protected function setUp()
+    {
+        $this->basePath = vfsStream::setup();
+        $this->basePath->addChild(vfsStream::newDirectory('project'));
+        $this->basePath->addChild(vfsStream::newDirectory('hooks'));
+        $this->basePath->addChild(vfsStream::newDirectory('.git/hooks'));
+    }
+
+    protected function getHookManager()
+    {
+        return new HookManager(
+            $this->basePath->getChild('project')->url(),
+            GitHelper::getHooksSourcePath(),
+            $this->basePath->getChild('.git/hooks')->url()
+        );
+    }
+
+    public function testHookManagerConstructor()
+    {
+        $hookManager = new HookManager(
+            $this->basePath->getChild('project')->url(),
+            $this->basePath->getChild('hooks')->url(),
+            'bar'
+        );
+
+        $this->setExpectedException('Exception', '', HookManager::BAD_PROJECT_PATH_EXCEPTION_CODE);
+        $hookManager = new HookManager('foo', 'bar', 'baz');
+
+        $this->setExpectedException('Exception', '', HookManager::BAD_HOOKS_SOURCE_PATH_EXCEPTION_CODE);
+        $hookManager = new HookManager($this->basePath->getChild('project')->url(), 'foo', 'bar');
+    }
+
     public function testHookInstall()
     {
-        $basePath = vfsStream::setup();
-        $hookManager = new HookManager();
+        $hookManager = $this->getHookManager();
 
-        $hookManager->installHooks($basePath->url());
+        $hookManager->installHooks();
 
-        $this->assertTrue($basePath->hasChild('pre-commit'), 'pre-commit hook is not present');
-        $this->assertTrue($basePath->hasChild('post-merge'), 'post-merge hook is not present');
-        $this->assertTrue($basePath->hasChild('post-checkout'), 'post-checkout hook is not present');
+        /** @var vfsStreamDirectory $hooksDestinationPath */
+        $hooksDestinationPath = $this->basePath->getChild('.git/hooks');
+        $this->assertTrue($hooksDestinationPath->hasChild('pre-commit'), 'pre-commit hook is not present');
+        $this->assertTrue($hooksDestinationPath->hasChild('post-merge'), 'post-merge hook is not present');
+        $this->assertTrue($hooksDestinationPath->hasChild('post-checkout'), 'post-checkout hook is not present');
+        $this->assertEquals(3, count($hooksDestinationPath->getChildren()), 'hook files count is not right');
     }
 
     public function testHookInstallWithBackups()
     {
-        $basePath = vfsStream::setup();
-        $hookManager = new HookManager();
+        $hookManager = $this->getHookManager();
 
-        $basePath->addChild(vfsStream::newFile('pre-commit'));
+        $hooksDestinationPath = $this->basePath->getChild('.git/hooks');
 
-        $hookManager->installHooks($basePath->url());
+        /** @var vfsStreamDirectory $hooksDestinationPath */
+        $hooksDestinationPath->addChild(vfsStream::newFile('pre-commit'));
 
-        $this->assertTrue($basePath->hasChild('pre-commit'), 'pre-commit hook is not present');
-        $this->assertTrue($basePath->hasChild('post-merge'), 'post-merge hook is not present');
-        $this->assertTrue($basePath->hasChild('post-checkout'), 'post-checkout hook is not present');
-        $this->assertTrue($basePath->hasChild('pre-commit.' . HookManager::BACKUP_FILE_EXTENSION), 'pre-commit hook has not been backed up');
+        $hookManager->installHooks();
+
+        $this->assertTrue($hooksDestinationPath->hasChild('pre-commit'), 'pre-commit hook is not present');
+        $this->assertTrue($hooksDestinationPath->hasChild('post-merge'), 'post-merge hook is not present');
+        $this->assertTrue($hooksDestinationPath->hasChild('post-checkout'), 'post-checkout hook is not present');
+        $this->assertTrue($hooksDestinationPath->hasChild('pre-commit.' . HookManager::BACKUP_FILE_EXTENSION), 'pre-commit hook has not been backed up');
     }
 
 
     public function testHookUninstall()
     {
-        $basePath = vfsStream::setup();
-        $hookManager = new HookManager();
+        $hookManager = $this->getHookManager();
 
-        $basePath->addChild(vfsStream::newFile('pre-commit'));
-        $basePath->addChild(vfsStream::newFile('post-merge'));
-        $basePath->addChild(vfsStream::newFile('post-checkout'));
+        /** @var vfsStreamDirectory $hooksDestinationPath */
+        $hooksDestinationPath = $this->basePath->getChild('.git/hooks');
 
-        $hookManager->uninstallHooks($basePath->url());
+        $hooksDestinationPath->addChild(vfsStream::newFile('pre-commit'));
+        $hooksDestinationPath->addChild(vfsStream::newFile('post-merge'));
+        $hooksDestinationPath->addChild(vfsStream::newFile('post-checkout'));
 
-        $this->assertFalse($basePath->hasChild('pre-commit'), 'pre-commit hook is still present');
-        $this->assertFalse($basePath->hasChild('post-merge'), 'post-merge hook is still present');
-        $this->assertFalse($basePath->hasChild('post-checkout'), 'post-checkout hook is still present');
+        $hookManager->uninstallHooks();
+
+        $this->assertFalse($hooksDestinationPath->hasChild('pre-commit'), 'pre-commit hook is still present');
+        $this->assertFalse($hooksDestinationPath->hasChild('post-merge'), 'post-merge hook is still present');
+        $this->assertFalse($hooksDestinationPath->hasChild('post-checkout'), 'post-checkout hook is still present');
     }
 
     public function testHookUninstallRestoreBackups()
     {
-        $basePath = vfsStream::setup();
-        $hookManager = new HookManager();
+        $hookManager = $this->getHookManager();
 
-        $basePath->addChild(vfsStream::newFile('pre-commit'));
-        $basePath->addChild(vfsStream::newFile('post-merge'));
-        $basePath->addChild(vfsStream::newFile('post-checkout'));
-        $basePath->addChild(vfsStream::newFile('pre-commit.' . HookManager::BACKUP_FILE_EXTENSION));
+        /** @var vfsStreamDirectory $hooksDestinationPath */
+        $hooksDestinationPath = $this->basePath->getChild('.git/hooks');
 
-        $hookManager->uninstallHooks($basePath->url());
+        $hooksDestinationPath->addChild(vfsStream::newFile('pre-commit'));
+        $hooksDestinationPath->addChild(vfsStream::newFile('post-merge'));
+        $hooksDestinationPath->addChild(vfsStream::newFile('post-checkout'));
+        $hooksDestinationPath->addChild(vfsStream::newFile('pre-commit.' . HookManager::BACKUP_FILE_EXTENSION));
 
-        $this->assertTrue($basePath->hasChild('pre-commit'), 'pre-commit hook backup has not been restored');
-        $this->assertFalse($basePath->hasChild('post-merge'), 'post-merge hook is still present');
-        $this->assertFalse($basePath->hasChild('post-checkout'), 'post-checkout hook is still present');
+        $hookManager->uninstallHooks();
+
+        $this->assertTrue($hooksDestinationPath->hasChild('pre-commit'), 'pre-commit hook backup has not been restored');
+        $this->assertFalse($hooksDestinationPath->hasChild('post-merge'), 'post-merge hook is still present');
+        $this->assertFalse($hooksDestinationPath->hasChild('post-checkout'), 'post-checkout hook is still present');
+    }
+
+    public function testHookCheck()
+    {
+        $hookManager = $this->getHookManager();
+
+        $this->assertEquals(1, $hookManager->checkHooks(), 'Hooks should not be installed yet');
+
+        $hookManager->installHooks();
+
+        $this->assertEquals(0, $hookManager->checkHooks(), 'Hooks should be installed but they are not');
+    }
+
+    public function testHookCheckExceptions()
+    {
+        $hookManager = new HookManager(
+            $this->basePath->getChild('project')->url(),
+            GitHelper::getHooksSourcePath(),
+            'foo'
+        );
+
+        $this->setExpectedException('Exception', '', HookManager::BAD_HOOKS_DESTINATION_PATH_EXCEPTION_CODE);
+
+        $hookManager->checkHooks();
     }
 }

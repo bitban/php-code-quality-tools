@@ -7,6 +7,7 @@
 
 namespace Bitban\PhpCodeQualityTools\Infrastructure\Git;
 
+use Bitban\PhpCodeQualityTools\Command\GitHooks\InstallCommand;
 use Bitban\PhpCodeQualityTools\Constants;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,24 +17,75 @@ class HookManager
 {
     const BACKUP_FILE_EXTENSION = 'bak';
 
+    const BAD_PROJECT_PATH_EXCEPTION_CODE = 1;
+    const BAD_HOOKS_SOURCE_PATH_EXCEPTION_CODE = 2;
+    const BAD_HOOKS_DESTINATION_PATH_EXCEPTION_CODE = 3;
+
+    /** @var string */
+    private $projectBasePath;
+    /** @var string */
+    private $hooksSourcePath;
+    /** @var string */
+    private $hooksDestinationPath;
+
     /** @var Filesystem */
     private $filesystem;
+
     /** @var OutputInterface */
-    private $output;
+    private $output = null;
     /** @var ProgressBar */
-    private $progressBar;
+    private $progressBar = null;
 
     /**
      * HookManager constructor.
-     * @param OutputInterface $output @optional
-     * @param ProgressBar $progressBar @optional
+     * @param string $projectBasePath
+     * @param string $hooksSourcePath
+     * @param string $hooksDestinationPath
+     * @throws \Exception
      */
-    public function __construct(OutputInterface $output = null, ProgressBar $progressBar = null)
+    public function __construct($projectBasePath, $hooksSourcePath, $hooksDestinationPath)
     {
         $this->filesystem = new Filesystem();
 
+        $this->projectBasePath = $projectBasePath;
+        $this->hooksSourcePath = $hooksSourcePath;
+        $this->hooksDestinationPath = $hooksDestinationPath;
+
+        // Parameter check
+        if (!$this->filesystem->exists($projectBasePath)) {
+            throw new \Exception("Could not find project base path in $projectBasePath", self::BAD_PROJECT_PATH_EXCEPTION_CODE);
+        } elseif (!$this->filesystem->exists($hooksSourcePath)) {
+            throw new \Exception("Could not find hooks source in $hooksSourcePath", self::BAD_HOOKS_SOURCE_PATH_EXCEPTION_CODE);
+        }
+        // .git/hooks should exist but may be not
+    }
+
+    /**
+     * @return HookManager
+     */
+    public static function getDefaultInstance()
+    {
+        return new self(GitHelper::getProjectBasepath(), GitHelper::getHooksSourcePath(), GitHelper::getHooksPath());
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @return $this
+     */
+    public function setOutput(OutputInterface $output)
+    {
         $this->output = $output;
+        return $this;
+    }
+
+    /**
+     * @param ProgressBar $progressBar
+     * @return $this
+     */
+    public function setProgressBar(ProgressBar $progressBar)
+    {
         $this->progressBar = $progressBar;
+        return $this;
     }
 
     private function progressBarInit($count)
@@ -76,14 +128,13 @@ class HookManager
         }
     }
 
-    public static function getHooksPath()
+    private function decorateOutput()
     {
-        return exec('git rev-parse --show-toplevel') . '/.git/hooks';
-    }
+        if ($this->output === null) {
+            return;
+        }
 
-    private function getHooksSourcePath()
-    {
-        return realpath(__DIR__ . '/../../../hooks');
+        $this->output->setDecorated(true);
     }
 
     private function backupHook($destinationFile)
@@ -101,17 +152,19 @@ class HookManager
         $this->outputWriteln(" <info>Restoring $backupFile</info>", true);
     }
 
-    public function installHooks($gitHooksPath)
+    /**
+     * @return int 0 if OK, 1 if ERROR
+     */
+    public function installHooks()
     {
-        $hooksSourcePath = $this->getHooksSourcePath();
         try {
 
-            if (!$this->filesystem->exists($gitHooksPath)) {
-                $this->filesystem->mkdir($gitHooksPath);
+            if (!$this->filesystem->exists($this->hooksDestinationPath)) {
+                $this->filesystem->mkdir($this->hooksDestinationPath);
             }
 
             $hooks = [];
-            foreach (new \DirectoryIterator($hooksSourcePath) as $hook) {
+            foreach (new \DirectoryIterator($this->hooksSourcePath) as $hook) {
                 if ($hook->isDot()) {
                     continue;
                 }
@@ -121,8 +174,8 @@ class HookManager
             $this->progressBarInit(count($hooks));
 
             foreach ($hooks as $hook) {
-                $sourceFile = $hooksSourcePath . '/' . $hook;
-                $destinationFile = $gitHooksPath . '/' . $hook;
+                $sourceFile = $this->hooksSourcePath . '/' . $hook;
+                $destinationFile = $this->hooksDestinationPath . '/' . $hook;
 
                 $this->backupHook($destinationFile);
 
@@ -147,15 +200,14 @@ class HookManager
     }
 
     /**
-     * @param string $gitHooksPath
-     * @return int
+     * @return int 0 if OK, 1 if ERROR
      */
-    public function uninstallHooks($gitHooksPath)
+    public function uninstallHooks()
     {
         try {
             $hooks = [];
             $backups = [];
-            foreach (new \DirectoryIterator($gitHooksPath) as $hook) {
+            foreach (new \DirectoryIterator($this->hooksDestinationPath) as $hook) {
                 if ($hook->isDot()) {
                     continue;
                 }
@@ -169,7 +221,7 @@ class HookManager
             $this->progressBarInit(count($hooks) + count($backups));
 
             foreach ($hooks as $hook) {
-                $sourceFile = $gitHooksPath . '/' . $hook;
+                $sourceFile = $this->hooksDestinationPath . '/' . $hook;
                 $this->filesystem->remove($sourceFile);
 
                 $this->progressBarAdvance();
@@ -190,5 +242,54 @@ class HookManager
         }
 
         return 0;
+    }
+
+    /**
+     * @param bool $skipOkMessage
+     * @return int 0 if OK, 1 if ERROR
+     * @throws \Exception
+     */
+    public function checkHooks($skipOkMessage = true)
+    {
+        if (!$this->filesystem->exists($this->hooksDestinationPath)) {
+            throw new \Exception("Cannot find hooks installation path: $this->hooksDestinationPath", self::BAD_HOOKS_DESTINATION_PATH_EXCEPTION_CODE);
+        }
+
+        $result = true;
+        try {
+            foreach (new \DirectoryIterator($this->hooksSourcePath) as $hook) {
+                if ($hook->isDot()) {
+                    continue;
+                }
+
+                $sourceFile = $this->hooksSourcePath . '/' . $hook;
+                $destinationFile = $this->hooksDestinationPath . '/' . $hook;
+
+                $filesMatch = (@file_get_contents($sourceFile) === @file_get_contents($destinationFile));
+
+                $result = $result && $filesMatch;
+
+                $this->outputWriteln("<info>Comparing $sourceFile with $destinationFile</info> " .
+                    ($filesMatch ? Constants::CHARACTER_OK : Constants::CHARACTER_KO), true);
+            }
+        } catch (\Exception $e) {
+            $this->outputWriteln("<error>" . $e->getMessage() . "</error>");
+            $result = false;
+        }
+
+        $this->decorateOutput();
+
+        if (!$result) {
+            $installCommand = InstallCommand::COMMAND_NAME;
+            $this->outputWriteln("<error>Your hooks are not properly configured!</error>\n");
+            $this->outputWriteln("<comment>You may install them running the folowing command:\n\n$this->projectBasePath/bin/php-cqtools $installCommand\n</comment>");
+            $result = false;
+        } else {
+            if (!$skipOkMessage) {
+                $this->outputWriteln("<info>Your hooks are properly set. Nice job!</info> " . Constants::CHARACTER_THUMB_UP);
+            }
+        }
+
+        return $result ? 0 : 1;
     }
 }
