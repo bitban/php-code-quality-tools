@@ -35,7 +35,7 @@ class ValidateCommand extends FilesetManipulationCommand
             ->setName(self::COMMAND_NAME)
             ->setDescription(self::COMMAND_DESCRIPTION)
             ->setHelp(self::COMMAND_HELP)
-            ->addOption(self::OPT_CUSTOM_RULESET, null, InputOption::VALUE_OPTIONAL, 'If present, uses PHP Code Sniffer custom ruleset');;
+            ->addOption(self::OPT_CUSTOM_RULESET, null, InputOption::VALUE_OPTIONAL, 'If present, uses PHP Code Sniffer custom ruleset');
     }
 
     /**

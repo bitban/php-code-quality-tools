@@ -12,8 +12,8 @@ class GitHelper
 {
     public static function getProjectBasepath()
     {
-        chdir(__DIR__);
-        return exec('git rev-parse --show-toplevel');
+        $selfDir = __DIR__;
+        return exec("cd $selfDir; git rev-parse --show-toplevel");
     }
 
     public static function getHooksPath()
