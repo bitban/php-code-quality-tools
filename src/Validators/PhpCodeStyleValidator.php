@@ -17,12 +17,13 @@ class PhpCodeStyleValidator extends AbstractValidator
     /**
      * PhpCodeStyleValidator constructor.
      * @param array $files
+     * @param string $basePath
      * @param OutputInterface $output
-     * @param string $customRuleset
+     * @param string $customRuleset @optional
      */
-    public function __construct(array $files, OutputInterface $output, $customRuleset)
+    public function __construct(array $files, $basePath, OutputInterface $output, $customRuleset = null)
     {
-        parent::__construct($files, $output);
+        parent::__construct($files, $basePath, $output);
         $this->customRuleset = $customRuleset;
     }
 
