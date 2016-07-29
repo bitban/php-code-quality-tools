@@ -23,7 +23,7 @@ class Constants
     const RETURN_CODE_WARNING = 1;
     const RETURN_CODE_ERROR = 2;
 
-    const PHP_FILES_REGEXP = '/^(.*)(\.php)|(\.inc)$/';
-    const JSON_FILES_REGEXP = '/^(.*)(\.json)$/';
+    const PHP_FILES_REGEXP = '/^(.*)\.(php|inc)$/';
+    const JSON_FILES_REGEXP = '/^(.*)\.json$/';
     const COMPOSER_FILES_REGEXP = '/^composer\.(json|lock)$/';
 }
