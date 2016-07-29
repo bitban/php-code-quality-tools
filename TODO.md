@@ -30,7 +30,7 @@
 * <del>validate given folder (appart from commited files)</del>
 * Add support for custom codestyles
 * Configure validations per project/on the fly
-* Configure skippable paths
+* <del>Configure skippable paths</del>
 * improve and simplify installation procedure
 * refactor code
 * pre-commit script

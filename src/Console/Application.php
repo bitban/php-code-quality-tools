@@ -16,13 +16,11 @@ use Bitban\PhpCodeQualityTools\Command\GitHooks\PostCheckoutCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\PostMergeCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\UninstallCommand;
 use Symfony\Component\Console\Application as BaseApplication;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class Application extends BaseApplication
 {
     const APP_NAME = 'Bitban Technologies PHP Code Quality Tools';
-    const APP_VERSION = '0.9.7';
+    const APP_VERSION = '0.9.8';
 
     public function __construct()
     {
