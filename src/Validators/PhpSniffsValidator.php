@@ -8,6 +8,7 @@
 namespace Bitban\PhpCodeQualityTools\Validators;
 
 use Bitban\PhpCodeQualityTools\Constants;
+use Bitban\PhpCodeQualityTools\Infrastructure\Git\GitHelper;
 use Symfony\Component\Process\Process;
 
 class PhpSniffsValidator extends AbstractValidator
@@ -19,8 +20,9 @@ class PhpSniffsValidator extends AbstractValidator
 
     protected function check($file)
     {
+        $projectBasepath = GitHelper::getProjectBasepath();
         $customStandard = realpath(__DIR__ . '/../Infrastructure/CodeSniffer/Standards/Custom');
-        $process = new Process(sprintf('php bin/phpcs --standard=%s %s', $customStandard, $file));
+        $process = new Process("$projectBasepath/bin/phpcs --standard=$customStandard $file");
 
         $process->run();
 

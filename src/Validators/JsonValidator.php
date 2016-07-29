@@ -8,6 +8,7 @@
 namespace Bitban\PhpCodeQualityTools\Validators;
 
 use Bitban\PhpCodeQualityTools\Constants;
+use Bitban\PhpCodeQualityTools\Infrastructure\Git\GitHelper;
 
 class JsonValidator extends AbstractValidator
 {
@@ -18,7 +19,8 @@ class JsonValidator extends AbstractValidator
 
     protected function check($file)
     {
-        $process = $this->buildProcess("bin/jsonlint $file");
+        $projectBasepath = GitHelper::getProjectBasepath();
+        $process = $this->buildProcess("$projectBasepath/bin/jsonlint $file");
         
         $process->run();
         
