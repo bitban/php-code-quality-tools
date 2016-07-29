@@ -12,6 +12,7 @@ class GitHelper
 {
     public static function getProjectBasepath()
     {
+        chdir(__DIR__);
         return exec('git rev-parse --show-toplevel');
     }
 

@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-${DIR}/../../bin/php-cqtools hooks:post-checkout ${DIR}/../../ $1 $2
+${DIR}/../../bin/php-cqtools hooks:post-checkout $1 $2

@@ -73,13 +73,15 @@ It calls code:validate command.
 
 It checks whether composer.lock has changed or not. If so, launches `composer install` command.
 
-`bin/php-cqtools hooks:post-checkout <projectPath> <prevCommit> <postCommit>`
+`bin/php-cqtools hooks:post-checkout <prevCommit> <postCommit> [<projectPath>]`
+
+`projectPath` argument sets path to be processed. Default value is current project base path.
 
 #### post-merge hook
 
 It has the same behaviour than post-checkout hook.
 
-`bin/php-cqtools hooks:post-merge <projectPath>`
+`bin/php-cqtools hooks:post-merge [<projectPath>]`
 
 ### Uninstall Git Hooks
 

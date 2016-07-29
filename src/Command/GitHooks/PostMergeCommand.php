@@ -7,6 +7,7 @@
 
 namespace Bitban\PhpCodeQualityTools\Command\GitHooks;
 
+use Bitban\PhpCodeQualityTools\Infrastructure\Git\GitHelper;
 use Bitban\PhpCodeQualityTools\Traits\CommonActionsTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -26,7 +27,7 @@ class PostMergeCommand extends Command
         $this
             ->setName(self::COMMAND_NAME)
             ->setDescription(self::COMMAND_DESCRIPTION)
-            ->addArgument(self::ARG_PROJECT_PATH, InputArgument::REQUIRED);
+            ->addArgument(self::ARG_PROJECT_PATH, InputArgument::OPTIONAL, 'Project base path', GitHelper::getProjectBasepath());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
