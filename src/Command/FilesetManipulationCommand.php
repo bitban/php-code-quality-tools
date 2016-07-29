@@ -9,6 +9,7 @@ namespace Bitban\PhpCodeQualityTools\Command;
 
 use Bitban\PhpCodeQualityTools\Constants;
 use Bitban\PhpCodeQualityTools\Infrastructure\Git\ExtractCommitedFiles;
+use Bitban\PhpCodeQualityTools\Infrastructure\Git\GitHelper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -165,7 +166,7 @@ abstract class FilesetManipulationCommand extends Command
     protected function configure()
     {
         $this
-            ->addArgument(self::ARG_PATH, InputArgument::REQUIRED)
+            ->addArgument(self::ARG_PATH, InputArgument::OPTIONAL, 'Path to be processed', GitHelper::getProjectBasepath())
             ->addOption(self::OPT_ONLY_COMMITED_FILES, null, InputOption::VALUE_NONE, 'If present, only commited files will be processed')
             ->addOption(self::OPT_EXCLUDED_PATHS, null, InputOption::VALUE_OPTIONAL, 'If present, these paths are ignored from processing', self::DEFAULT_BITBAN_EXCLUDED_PATHS);
     }

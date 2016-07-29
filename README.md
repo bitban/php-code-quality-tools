@@ -67,7 +67,7 @@ Git hooks managed are:
 
 It calls code:validate command.
 
-`bin/php-cqtools code:validate --only-commited-files <projectPath>`
+`bin/php-cqtools code:validate --only-commited-files`
 
 #### post-checkout hook
 
@@ -93,7 +93,9 @@ Fixes code style of files according to Bitban's code style.
 
 It may fix all project files or only files to be commited. This second option is very convinient to fix errors detected in pre-commit hook.
 
-`bin/php-cqtools code:fix-codestyle [--dry-run] [--excluded-paths] [--only-commited-files] <path>`
+`bin/php-cqtools code:fix-codestyle [--dry-run] [--excluded-paths] [--only-commited-files] [<projectPath>]`
+
+`projectPath` argument sets path to be processed. Default value is current project base path. 
 
 `--dry-run` option shows diffs without applying any changes to files.
 `--excluded-paths` option sets some paths not to be processed.
@@ -112,7 +114,9 @@ It performs several tasks:
 * Composer related files:
   * Check that composer.json is not commited without composer.lock (checked only with --only-commited-files modifier)
 
-`bin/php-cqtools code:validate [--excluded-paths] [--only-commited-files] <path>`
+`bin/php-cqtools code:validate [--excluded-paths] [--only-commited-files] [<projectPath>]`
+
+`projectPath` argument sets path to be processed. Default value is current project base path.
 
 `--excluded-paths` option sets some paths not to be processed.
 `--only-commited-files` option processes only files scheduled to be commited.
