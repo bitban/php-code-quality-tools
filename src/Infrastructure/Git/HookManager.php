@@ -140,7 +140,11 @@ class HookManager
     private function backupHook($destinationFile)
     {
         if ($this->filesystem->exists($destinationFile)) {
-            $this->filesystem->rename($destinationFile, $destinationFile . '.' . self::BACKUP_FILE_EXTENSION);
+            $destinationFileBackup = $destinationFile . '.' . self::BACKUP_FILE_EXTENSION;
+            if ($this->filesystem->exists($destinationFileBackup)) {
+                $this->outputWriteln(" <info>$destinationFileBackup will be overwritten</info>", true);
+            }
+            $this->filesystem->rename($destinationFile, $destinationFileBackup, true);
             $this->outputWriteln(" <info>Backing up $destinationFile</info>", true);
         }
     }
