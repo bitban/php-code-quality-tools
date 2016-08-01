@@ -123,6 +123,26 @@ It performs several tasks:
 `--excluded-paths` option sets some paths not to be processed.
 `--only-commited-files` option processes only files scheduled to be commited.
 
+## Show debug information
+
+Shows debug information about:
+
+* Validation/fix tools installed, such as phpcs, jsonlint, phpcbf
+* Project basepath
+* Git hooks path
+* Git hooks source path
+* Commited files
+* Excluded paths
+* Project files
+
+`bin/php-cqtools debug:show [--show-full-paths] [<projectPath]`
+
+`projectPath` argument sets path to be processed. Default value is current project base path.
+
+`--show-full-paths` option enables full path file listing instead of relative path
+
+This command, may be unavailable in any future versions of these tools, as it has been added for debug purposes.
+
 ## References
 
 Here are several interesting links with information (and inspiration) about this subject.

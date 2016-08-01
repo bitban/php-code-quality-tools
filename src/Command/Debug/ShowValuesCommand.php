@@ -20,7 +20,7 @@ class ShowValuesCommand extends FilesetManipulationCommand
     const COMMAND_NAME = 'debug:show';
     const COMMAND_DESCRIPTION = 'Shows values calculated by tool';
     const COMMAND_HELP = 'Shows values calculated by tool. Useful for debugging purposes, may disappear in the future.';
-    const OPTION_SHOW_FULL_PATH = 'show-full-path';
+    const OPTION_SHOW_FULL_PATHS = 'show-full-paths';
 
     protected function configure()
     {
@@ -29,7 +29,7 @@ class ShowValuesCommand extends FilesetManipulationCommand
             ->setName(self::COMMAND_NAME)
             ->setDescription(self::COMMAND_DESCRIPTION)
             ->setHelp(self::COMMAND_HELP)
-            ->addOption(self::OPTION_SHOW_FULL_PATH, null, InputOption::VALUE_NONE, 'If present, full paths will be shown');
+            ->addOption(self::OPTION_SHOW_FULL_PATHS, null, InputOption::VALUE_NONE, 'If present, files will be listed with full paths');
     }
 
     /**
@@ -49,7 +49,7 @@ class ShowValuesCommand extends FilesetManipulationCommand
     {
         parent::execute($input, $output);
 
-        $showFullPath = $input->getOption(self::OPTION_SHOW_FULL_PATH);
+        $showFullPath = $input->getOption(self::OPTION_SHOW_FULL_PATHS);
 
         // Available tools
         $tools = ['jsonlint', 'phpcs', 'phpcbf'];
