@@ -9,21 +9,17 @@ namespace Bitban\PhpCodeQualityTools\Command;
 
 use Bitban\PhpCodeQualityTools\Constants;
 use Bitban\PhpCodeQualityTools\Infrastructure\Git\ExtractCommitedFiles;
-use Bitban\PhpCodeQualityTools\Infrastructure\Git\GitHelper;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
+use Bitban\PhpCodeQualityTools\Infrastructure\Project;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
 
-abstract class FilesetManipulationCommand extends Command
+abstract class FilesetManipulationCommand extends BaseCommand
 {
     const FILE_TYPE_PHP = 'php';
     const FILE_TYPE_JSON = 'json';
     const FILE_TYPE_COMPOSER = 'composer';
 
-    const ARG_PATH = 'projectPath';
     const OPT_EXCLUDED_PATHS = 'excluded-paths';
     const OPT_ONLY_COMMITED_FILES = 'only-commited-files';
 
@@ -36,6 +32,9 @@ abstract class FilesetManipulationCommand extends Command
         self::FILE_TYPE_JSON => [],
         self::FILE_TYPE_COMPOSER => []
     ];
+
+    /** @var string[] */
+    protected $excludedPaths;
 
     /**
      * @param string $file
@@ -86,12 +85,24 @@ abstract class FilesetManipulationCommand extends Command
     }
 
     /**
+     * @return string[]
+     */
+    protected function getAllFiles()
+    {
+        return array_unique(array_merge(
+            $this->getPhpFiles(),
+            $this->getComposerFiles(),
+            $this->getJsonFiles()
+        ));
+    }
+
+    /**
      * @param string $path
      * @param string[] $excludedPaths
      * @param OutputInterface $output
      * @return \string[]
      */
-    protected function listFiles($path, $excludedPaths, $output)
+    private function fetchProjectFiles($path, $excludedPaths, $output)
     {
         // Single file is also accepted as "path"
         if (is_file($path)) {
@@ -103,40 +114,34 @@ abstract class FilesetManipulationCommand extends Command
         $path = rtrim($path, '/');
 
         $output->writeln("<info>Processing files in $path</info>");
-        $finder = new Finder();
-        $finder
-            ->files()
-            ->in($path)
-            ->name(Constants::PHP_FILES_REGEXP)
-            ->name(Constants::JSON_FILES_REGEXP)
-            ->name(Constants::COMPOSER_FILES_REGEXP)
-            ->exclude($excludedPaths);
-        return iterator_to_array($finder);
+
+        return (new Project)->listFiles($path, $excludedPaths);
     }
 
     /**
-     * @param OutputInterface $output
      * @param string[] $excludedPaths
+     * @param OutputInterface $output
      * @return string[]
      */
-    protected function extractCommitFiles($output, $excludedPaths)
+    private function fetchCommitedFiles($excludedPaths, $output)
     {
         $output->writeln("<info>Processing commited files</info>");
+
         $output->write('<info>Fetching changed files...</info>');
 
-        $changedFiles = (new ExtractCommitedFiles())->setExcludedPaths($excludedPaths)->getFiles();
+        $commitedFiles = (new ExtractCommitedFiles())->setExcludedPaths($excludedPaths)->getFiles();
 
-        $result = (count($changedFiles) > 1) ? count($changedFiles) . ' files changed' : 'No files changed';
+        $result = (count($commitedFiles) > 1) ? count($commitedFiles) . ' files changed' : 'No files changed';
         $output->writeln("<info>$result</info>");
 
         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {
             $output->writeln("<info>Changed files list</info>");
-            foreach ($changedFiles as $file) {
+            foreach ($commitedFiles as $file) {
                 $output->writeln($file);
             }
         }
 
-        return $changedFiles;
+        return $commitedFiles;
     }
     
     /**
@@ -165,8 +170,8 @@ abstract class FilesetManipulationCommand extends Command
 
     protected function configure()
     {
+        parent::configure();
         $this
-            ->addArgument(self::ARG_PATH, InputArgument::OPTIONAL, 'Path to be processed', GitHelper::getProjectBasepath())
             ->addOption(self::OPT_ONLY_COMMITED_FILES, null, InputOption::VALUE_NONE, 'If present, only commited files will be processed')
             ->addOption(self::OPT_EXCLUDED_PATHS, null, InputOption::VALUE_OPTIONAL, 'If present, these paths are ignored from processing', self::DEFAULT_BITBAN_EXCLUDED_PATHS);
     }
@@ -178,6 +183,7 @@ abstract class FilesetManipulationCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->excludedPaths = explode(',', $input->getOption(self::OPT_EXCLUDED_PATHS));
         $this->loadFiles($input, $output);
     }
 
@@ -187,12 +193,9 @@ abstract class FilesetManipulationCommand extends Command
      */
     protected function loadFiles(InputInterface $input, OutputInterface $output)
     {
-        $excludedPaths = explode(',', $input->getOption(self::OPT_EXCLUDED_PATHS));
-        if ($input->getOption(self::OPT_ONLY_COMMITED_FILES)) {
-            $files = $this->extractCommitFiles($output, $excludedPaths);
-        } else {
-            $files = $this->listFiles($input->getArgument(self::ARG_PATH), $excludedPaths, $output);
-        }
+        $files = ($input->getOption(self::OPT_ONLY_COMMITED_FILES)) ?
+            $this->fetchCommitedFiles($this->excludedPaths, $output) :
+            $this->fetchProjectFiles($this->projectBasepath, $this->excludedPaths, $output);
 
         foreach ($files as $file) {
             if (preg_match(Constants::PHP_FILES_REGEXP, basename($file))) {

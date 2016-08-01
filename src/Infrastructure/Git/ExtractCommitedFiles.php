@@ -19,7 +19,7 @@ class ExtractCommitedFiles
 
     private function execute()
     {
-        exec('git rev-parse --verify HEAD 2> /dev/null', $this->output, $this->rc);
+        exec('git rev-parse --verify HEAD 2> /dev/null', $discardOutput, $this->rc); // Store output in $discardOutput as it will be discarded
 
         $against = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
         if ($this->rc === 0) {
@@ -46,6 +46,7 @@ class ExtractCommitedFiles
     {
         $this->execute();
 
+        // Excluded paths
         $excludedPaths = $this->excludedPaths;
         $files = array_filter($this->output, function ($item) use ($excludedPaths) {
             foreach ($excludedPaths as $excludedPath) {

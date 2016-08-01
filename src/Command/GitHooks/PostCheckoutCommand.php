@@ -23,7 +23,7 @@ class PostCheckoutCommand extends Command
     const ARG_PROJECT_PATH = 'projectPath';
     const ARG_PREV_COMMIT = 'prevCommit';
     const ARG_POST_COMMIT = 'postCommit';
-         
+
     protected function configure()
     {
         $this

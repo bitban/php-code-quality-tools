@@ -10,6 +10,7 @@ namespace Bitban\PhpCodeQualityTools\Console;
 use Bitban\PhpCodeQualityTools\Command\Code\CustomFixCommand;
 use Bitban\PhpCodeQualityTools\Command\Code\FixCodeStyleCommand;
 use Bitban\PhpCodeQualityTools\Command\Code\ValidateCommand;
+use Bitban\PhpCodeQualityTools\Command\Debug\ShowValuesCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\CheckCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\InstallCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\PostCheckoutCommand;
@@ -20,7 +21,7 @@ use Symfony\Component\Console\Application as BaseApplication;
 class Application extends BaseApplication
 {
     const APP_NAME = 'Bitban Technologies PHP Code Quality Tools';
-    const APP_VERSION = '0.9.8';
+    const APP_VERSION = '0.9.9';
 
     public function __construct()
     {
@@ -35,7 +36,9 @@ class Application extends BaseApplication
 
             new FixCodeStyleCommand(),
             new ValidateCommand(),
-            new CustomFixCommand()
+            new CustomFixCommand(),
+
+            new ShowValuesCommand()
         ]);
     }
 }
