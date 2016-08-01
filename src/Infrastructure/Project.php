@@ -25,6 +25,12 @@ class Project
      */
     public function listFiles($path, $excludedPaths = [])
     {
+        if (is_file($path)) {
+            $defaultProjectBasepath = (new Project())->getBasepath();
+            $file = str_replace($defaultProjectBasepath . '/', '', $path);
+            return [$file];
+        }
+
         $finder = new Finder();
         $finder
             ->files()

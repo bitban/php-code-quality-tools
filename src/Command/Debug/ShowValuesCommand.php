@@ -8,6 +8,7 @@
 namespace Bitban\PhpCodeQualityTools\Command\Debug;
 
 use Bitban\PhpCodeQualityTools\Command\FilesetManipulationCommand;
+use Bitban\PhpCodeQualityTools\Constants;
 use Bitban\PhpCodeQualityTools\Infrastructure\Git\ExtractCommitedFiles;
 use Bitban\PhpCodeQualityTools\Infrastructure\Git\GitHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -50,6 +51,22 @@ class ShowValuesCommand extends FilesetManipulationCommand
 
         $showFullPath = $input->getOption(self::OPTION_SHOW_FULL_PATH);
 
+        // Available tools
+        $tools = ['jsonlint', 'phpcs', 'phpcbf'];
+        $output->writeln('<info>Available tools</info>:');
+        $missingTools = false;
+        foreach ($tools as $tool) {
+            if (!file_exists($this->projectBasepath . '/bin/' . $tool)) {
+                $output->writeln($tool . ' ' . Constants::CHARACTER_KO);
+                $missingTools = true;
+            } else {
+                $output->writeln($tool . ' ' . Constants::CHARACTER_OK);
+            }
+        }
+        if ($missingTools) {
+            $output->writeln('<fg=red>Some tools are missing. Did you forget to execute composer install?</fg=red>');
+        }
+
         // Project basepath
         $output->writeln('<info>Project basepath</info>:');
         $output->writeln($this->projectBasepath);
@@ -63,18 +80,18 @@ class ShowValuesCommand extends FilesetManipulationCommand
         $output->writeln($hooksSourcePath);
         // Commited files
         $commitedFiles = (new ExtractCommitedFiles())->getFiles();
-        $output->writeln('<info>Commited files' . (!$showFullPath ? ' (from project basepath)' : '') . '</info>:');
+        $output->writeln('<info>Commited files</info>:');
         foreach ($this->prefixFiles($commitedFiles, $showFullPath) as $file) {
             $output->writeln($file);
         }
         // Excluded paths
-        $output->writeln('<info>Excluded paths' . (!$showFullPath ? ' (from project basepath)' : '') . '</info>:');
+        $output->writeln('<info>Excluded paths</info>:');
         foreach ($this->prefixFiles($this->excludedPaths, $showFullPath) as $path) {
             $output->writeln($path);
         }
         // Project files (not in excluded paths)
         $projectFiles = $this->getAllFiles();
-        $output->writeln('<info>Project files' . (!$showFullPath ? ' (from project basepath)' : '') . '</info>:');
+        $output->writeln('<info>Project files</info>:');
         foreach ($this->prefixFiles($projectFiles, $showFullPath) as $file) {
             $output->writeln($file);
         }

@@ -99,22 +99,10 @@ abstract class FilesetManipulationCommand extends BaseCommand
     /**
      * @param string $path
      * @param string[] $excludedPaths
-     * @param OutputInterface $output
-     * @return \string[]
+     * @return string[]
      */
-    private function fetchProjectFiles($path, $excludedPaths, $output)
+    private function fetchProjectFiles($path, $excludedPaths)
     {
-        // Single file is also accepted as "path"
-        if (is_file($path)) {
-            $output->writeln("<info>Processing $path</info>");
-            return [$path];
-        }
-
-        // Remove trailing slash if present
-        $path = rtrim($path, '/');
-
-        $output->writeln("<info>Processing files in $path</info>");
-
         return (new Project)->listFiles($path, $excludedPaths);
     }
 
@@ -185,6 +173,10 @@ abstract class FilesetManipulationCommand extends BaseCommand
     {
         $this->excludedPaths = explode(',', $input->getOption(self::OPT_EXCLUDED_PATHS));
         $this->loadFiles($input, $output);
+        if (is_file($this->projectBasepath)) {
+            // Project basepath may not be a single file. Fallback to default value
+            $this->projectBasepath = (new Project())->getBasepath();
+        }
     }
 
     /**
@@ -195,7 +187,7 @@ abstract class FilesetManipulationCommand extends BaseCommand
     {
         $files = ($input->getOption(self::OPT_ONLY_COMMITED_FILES)) ?
             $this->fetchCommitedFiles($this->excludedPaths, $output) :
-            $this->fetchProjectFiles($this->projectBasepath, $this->excludedPaths, $output);
+            $this->fetchProjectFiles($this->projectBasepath, $this->excludedPaths);
 
         foreach ($files as $file) {
             if (preg_match(Constants::PHP_FILES_REGEXP, basename($file))) {
