@@ -61,11 +61,12 @@ class HookManager
     }
 
     /**
+     * @param $projectBasePath
      * @return HookManager
      */
-    public static function getDefaultInstance()
+    public static function getDefaultInstance($projectBasePath)
     {
-        return new self(GitHelper::getProjectBasepath(), GitHelper::getHooksSourcePath(), GitHelper::getHooksPath());
+        return new self($projectBasePath, GitHelper::getHooksSourcePath(), GitHelper::getHooksPath());
     }
 
     /**

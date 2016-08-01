@@ -7,14 +7,13 @@
 
 namespace Bitban\PhpCodeQualityTools\Command\GitHooks;
 
-use Bitban\PhpCodeQualityTools\Infrastructure\Git\GitHelper;
+use Bitban\PhpCodeQualityTools\Command\BaseCommand;
 use Bitban\PhpCodeQualityTools\Traits\CommonActionsTrait;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PostCheckoutCommand extends Command
+class PostCheckoutCommand extends BaseCommand
 {
     use CommonActionsTrait;
     
@@ -30,23 +29,22 @@ class PostCheckoutCommand extends Command
             ->setName(self::COMMAND_NAME)
             ->setDescription(self::COMMAN_DESCRIPTION)
             ->addArgument(self::ARG_PREV_COMMIT, InputArgument::REQUIRED)
-            ->addArgument(self::ARG_POST_COMMIT, InputArgument::REQUIRED)
-            ->addArgument(self::ARG_PROJECT_PATH, InputArgument::OPTIONAL, 'Project base path', GitHelper::getProjectBasepath());
+            ->addArgument(self::ARG_POST_COMMIT, InputArgument::REQUIRED);
+        parent::configure();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<info>Running post-checkout hook</info>');
         
-        $projectPath = realpath($input->getArgument(self::ARG_PROJECT_PATH));
         $prevCommit = $input->getArgument(self::ARG_PREV_COMMIT);
         $postCommit = $input->getArgument(self::ARG_POST_COMMIT);
 
         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-            $output->writeln('<info>Project path: ' . $projectPath . '</info>');
+            $output->writeln('<info>Project path: ' . $this->projectBasepath . '</info>');
         }
 
         $gitCommand = "git diff --shortstat $prevCommit..$postCommit composer.lock";
-        $this->checkComposerLockChanges($projectPath, $gitCommand, $output);
+        $this->checkComposerLockChanges($this->projectBasepath, $gitCommand, $output);
     }
 }
