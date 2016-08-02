@@ -36,11 +36,17 @@ class PhpCodeStyleValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $returnValue = $this->_testPhpSniffs(__DIR__ . '/testcases/code-style/BitbanCodeStyleError.php');
         $this->assertEquals(Constants::RETURN_CODE_ERROR, $returnValue, 'PHP file code style is wrong but validator did not return ERROR code');
+
+        $returnValue = $this->_testPhpSniffs(__DIR__ . '/testcases/code-style/CodeStyleNoCamelCaps.php');
+        $this->assertEquals(Constants::RETURN_CODE_ERROR, $returnValue, 'PHP file code style is wrong but validator did not return ERROR code');
     }
 
     public function testPhpCodeStyleValidatorCustomRulesetOk()
     {
         $returnValue = $this->_testPhpSniffs(__DIR__ . '/testcases/code-style/BitbanCodeStyleCustomOk.php', __DIR__ . '/../rulesets/bitban-extended.xml');
+        $this->assertEquals(Constants::RETURN_CODE_OK, $returnValue, 'PHP file code style is right but validator did not return OK code ' . $returnValue);
+
+        $returnValue = $this->_testPhpSniffs(__DIR__ . '/testcases/code-style/CodeStyleNoCamelCaps.php', __DIR__ . '/../rulesets/bitban-extended.xml');
         $this->assertEquals(Constants::RETURN_CODE_OK, $returnValue, 'PHP file code style is right but validator did not return OK code ' . $returnValue);
     }
 
