@@ -58,8 +58,6 @@ class PhpCodeStyleValidator extends AbstractValidator
         if (!$process->isSuccessful()) {
             $this->output->writeln(sprintf('<error>%s</error>', trim($process->getErrorOutput())));
             $processOutput = $process->getOutput();
-            print_r("$binPath/phpcs --standard=$this->ruleset $file");
-            print_r($processOutput);
             if (preg_match('/\bERROR\b/', $processOutput)) {
                 $exception = new ErrorException(sprintf(Constants::ERROR_MESSAGE_WRAPPER, $processOutput));
             } else {
