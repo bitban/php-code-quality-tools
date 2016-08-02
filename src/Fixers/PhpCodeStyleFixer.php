@@ -16,10 +16,29 @@ class PhpCodeStyleFixer implements FixerInterface
     private $files;
     private $output;
 
+    private $ruleset;
+
     public function __construct($files, OutputInterface $output)
     {
         $this->files = $files;
         $this->output = $output;
+        $this->ruleset = realpath(__DIR__ . '/../../rulesets/bitban.xml');
+    }
+
+    /**
+     * @param string $ruleset
+     * @return PhpCodeStyleFixer
+     * @throws \Exception
+     */
+    public function setRuleset($ruleset)
+    {
+        if (realpath($ruleset)) {
+            $this->ruleset = realpath($ruleset);
+        } else {
+            throw new \Exception("Custom ruleset $ruleset not found");
+        }
+
+        return $this;
     }
 
     /**
@@ -38,10 +57,9 @@ class PhpCodeStyleFixer implements FixerInterface
 
             $this->output->writeln('<info>' . ($dryRun ? 'Analysing' : 'Fixing') . ' file ' . $file . '</info>');
 
-            $ruleset = realpath(__DIR__ . '/../../rulesets/bitban.xml');
             $command = $dryRun ?
-                "php bin/phpcs --standard=$ruleset --report-full --report-diff $file" :
-                "php bin/phpcbf --standard=$ruleset --extensions=php,inc $file";
+                "php bin/phpcs --standard=$this->ruleset --report-full --report-diff $file" :
+                "php bin/phpcbf --standard=$this->ruleset --extensions=php,inc $file";
 
             if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {
                 $this->output->writeln("<info>Running: $command</info>");

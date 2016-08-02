@@ -91,17 +91,18 @@ Removes Git hooks from destination path. If backup files exist, they are restore
 
 ### Fix Code Style
 
-Fixes code style of files according to Bitban's code style.
+Fixes code style of files according to defined code style.
 
 It may fix all project files or only files to be commited. This second option is very convinient to fix errors detected in pre-commit hook.
 
-`bin/php-cqtools code:fix-codestyle [--dry-run] [--excluded-paths] [--only-commited-files] [<projectPath>]`
+`bin/php-cqtools code:fix-codestyle [--dry-run] [--excluded-paths=EXCLUDED_PATHS] [--only-commited-files] [--custom-ruleset=CUSTOM_RULESET] [<projectPath>]`
 
 `projectPath` argument sets path to be processed. Default value is current project base path. 
 
 `--dry-run` option shows diffs without applying any changes to files.
 `--excluded-paths` option sets some paths not to be processed.
 `--only-commited-files` option processes only files scheduled to be commited.
+`--custom-ruleset` option sets phpcs custom ruleset to be used instead of default one
 
 ### Validate Code
 
@@ -110,7 +111,7 @@ It performs several tasks:
 * PHP files:
   * Check for syntax errors
   * Check that forbidden functions (i.e., var_dump(), empty()) are not commited
-  * Check that code complies code style recommendations (errors cannot be commited, warnings may be)
+  * Check that code complies defined code style recommendations (errors cannot be commited, warnings may be)
   * Check that variable usage is right (i.e., use undefined variables, parameters not used, etc.)
 * JSON files:
   * Check for syntax errors
