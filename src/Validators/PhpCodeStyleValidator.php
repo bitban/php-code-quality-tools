@@ -13,24 +13,34 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class PhpCodeStyleValidator extends AbstractValidator
 {
-    protected $customRuleset;
+    protected $ruleset;
 
     /**
      * PhpCodeStyleValidator constructor.
-     * @param array $files
+     * @param string[] $files
      * @param string $basePath
      * @param OutputInterface $output
-     * @param string $customRuleset @optional
      */
-    public function __construct(array $files, $basePath, OutputInterface $output, $customRuleset = null)
+    public function __construct(array $files, $basePath, OutputInterface $output)
     {
         parent::__construct($files, $basePath, $output);
-        $this->customRuleset = $customRuleset;
+        $this->ruleset = realpath(__DIR__ . '/../../rulesets/bitban.xml');
     }
 
-    protected function getRulesetPath()
+    /**
+     * @param string $ruleset
+     * @return PhpCodeStyleValidator
+     * @throws \Exception
+     */
+    public function setRuleset($ruleset)
     {
-        return realpath(($this->customRuleset !== null) ?$this->customRuleset : __DIR__ . '/../../rulesets/bitban.xml');
+        if (realpath($ruleset)) {
+            $this->ruleset = realpath($ruleset);
+        } else {
+            throw new \Exception("Custom ruleset $ruleset not found");
+        }
+
+        return $this;
     }
 
     protected function getValidatorTitle()
@@ -41,8 +51,7 @@ class PhpCodeStyleValidator extends AbstractValidator
     protected function check($file)
     {
         $projectBasepath = GitHelper::getProjectBasepath();
-        $ruleset = $this->getRulesetPath();
-        $process = $this->buildProcess("$projectBasepath/bin/phpcs --standard=$ruleset $file");
+        $process = $this->buildProcess("$projectBasepath/bin/phpcs --standard=$this->ruleset $file");
         
         $process->run();
 

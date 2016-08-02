@@ -35,7 +35,7 @@ class ValidateCommand extends FilesetManipulationCommand
             ->setName(self::COMMAND_NAME)
             ->setDescription(self::COMMAND_DESCRIPTION)
             ->setHelp(self::COMMAND_HELP)
-            ->addOption(self::OPT_CUSTOM_RULESET, null, InputOption::VALUE_OPTIONAL, 'If present, uses PHP Code Sniffer custom ruleset');
+            ->addOption(self::OPT_CUSTOM_RULESET, null, InputOption::VALUE_OPTIONAL, 'If present, uses PHP Code Sniffer with custom ruleset');
     }
 
     /**
@@ -62,7 +62,13 @@ class ValidateCommand extends FilesetManipulationCommand
         if (true === $this->isProcessingAnyPhpFile()) {
             $validators[] = new PhpSyntaxValidator($this->getPhpFiles(), $projectPath, $output);
             $validators[] = new PhpForbiddenKeywordsValidator($this->getPhpFiles(), $projectPath, $output);
-            $validators[] = new PhpCodeStyleValidator($this->getPhpFiles(), $projectPath, $output);
+
+            $phpCodeStyleValidator = new PhpCodeStyleValidator($this->getPhpFiles(), $projectPath, $output);
+            if ($input->getOption(self::OPT_CUSTOM_RULESET) !== null) {
+                $phpCodeStyleValidator->setRuleset($input->getOption(self::OPT_CUSTOM_RULESET));
+            }
+            $validators[] = $phpCodeStyleValidator;
+
             $validators[] = new PhpSniffsValidator($this->getPhpFiles(), $projectPath, $output);
         }
 
