@@ -109,19 +109,21 @@ It performs several tasks:
 
 * PHP files:
   * Check for syntax errors
-  * Check that forbidden functions (i.e., var_dump(), empty()) are commited
-  * Check that code complies Bitban's code style recommendations (errors cannot be commited, warnings may be)
+  * Check that forbidden functions (i.e., var_dump(), empty()) are not commited
+  * Check that code complies code style recommendations (errors cannot be commited, warnings may be)
+  * Check that variable usage is right (i.e., use undefined variables, parameters not used, etc.)
 * JSON files:
   * Check for syntax errors
 * Composer related files:
   * Check that composer.json is not commited without composer.lock (checked only with --only-commited-files modifier)
 
-`bin/php-cqtools code:validate [--excluded-paths] [--only-commited-files] [<projectPath>]`
+`bin/php-cqtools code:validate [--excluded-paths=EXCLUDED_PATHS] [--only-commited-files] [--custom-ruleset=CUSTOM_RULESET] [<projectPath>]`
 
 `projectPath` argument sets path to be processed. Default value is current project base path.
 
 `--excluded-paths` option sets some paths not to be processed.
 `--only-commited-files` option processes only files scheduled to be commited.
+`--custom-ruleset` option sets phpcs custom ruleset to be used instead of default one
 
 ## Show debug information
 
