@@ -8,7 +8,7 @@
 namespace Bitban\PhpCodeQualityTools\Validators;
 
 use Bitban\PhpCodeQualityTools\Constants;
-use Bitban\PhpCodeQualityTools\Infrastructure\Git\GitHelper;
+use Bitban\PhpCodeQualityTools\Infrastructure\Project;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PhpCodeStyleValidator extends AbstractValidator
@@ -50,8 +50,8 @@ class PhpCodeStyleValidator extends AbstractValidator
 
     protected function check($file)
     {
-        $projectBasepath = GitHelper::getProjectBasepath();
-        $process = $this->buildProcess("$projectBasepath/bin/phpcs --standard=$this->ruleset $file");
+        $binPath = (new Project())->getBinPath();
+        $process = $this->buildProcess("$binPath/phpcs --standard=$this->ruleset $file");
         
         $process->run();
 

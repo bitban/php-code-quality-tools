@@ -18,6 +18,11 @@ class Project
         return GitHelper::getProjectBasepath();
     }
 
+    public function getBinPath()
+    {
+        return $this->getBasepath() . '/bin';
+    }
+
     /**
      * @param string $path
      * @param string[] $excludedPaths
