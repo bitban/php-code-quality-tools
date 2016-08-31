@@ -28,6 +28,11 @@ class PhpForbiddenKeywordsValidator extends AbstractValidator
     {
         return 'Validating PHP forbidden keywords';
     }
+
+    public static function getDisabledText()
+    {
+        return 'PHP forbidden keywords validation disabled';
+    }
     
     private function checkForbiddenKeywords($file, $validation)
     {

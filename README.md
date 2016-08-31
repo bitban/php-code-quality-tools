@@ -104,6 +104,8 @@ It may fix all project files or only files to be commited. This second option is
 `--only-commited-files` option processes only files scheduled to be commited.
 `--custom-ruleset` option sets phpcs custom ruleset to be used instead of default one
 
+The behaviour of this command (related to ruleset) can also be set using "Project global configuration".
+
 ### Validate Code
 
 It performs several tasks:
@@ -126,6 +128,8 @@ It performs several tasks:
 `--only-commited-files` option processes only files scheduled to be commited.
 `--custom-ruleset` option sets phpcs custom ruleset to be used instead of default one
 
+The behaviour of this command can also be set using "Project global configuration".
+
 ## Show debug information
 
 Shows debug information about:
@@ -145,6 +149,14 @@ Shows debug information about:
 `--show-full-paths` option enables full path file listing instead of relative path
 
 This command, may be unavailable in any future versions of these tools, as it has been added for debug purposes.
+
+## Project global configuration
+
+If `php-cqtools.conf.yml` file exists at project basepath level, it will be processed and will set up `code:validate` and `code:fix-codestyle` commands behaviour. If not, default configuration will be applied.
+
+With this configuration file, it is easy to set up which validations will be performed, which will be skipped and which codeset rules will be applied, for example.
+
+A sample of this file, which is also the default, can be found at `Resources/php-cqtools.conf.default.yml`.
 
 ## References
 

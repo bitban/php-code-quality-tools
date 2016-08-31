@@ -18,6 +18,11 @@ class PhpSniffsValidator extends AbstractValidator
         return 'Validating PHP sniffs';
     }
 
+    public static function getDisabledText()
+    {
+        return 'PHP sniffs validation disabled';
+    }
+
     protected function check($file)
     {
         $binPath = (new Project())->getBinPath();

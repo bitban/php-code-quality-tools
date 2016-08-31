@@ -1,0 +1,11 @@
+# PHP Code Quality Tools default configuration file
+---
+
+validations:
+  php_syntax: true : false
+  forbidden_keywords: true
+  variable_usage: true
+  codestyle: true
+  json_syntax: true
+  composer_files_commited_together: true
+codestyle_ruleset: "bitban.xml"

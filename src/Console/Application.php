@@ -16,12 +16,20 @@ use Bitban\PhpCodeQualityTools\Command\GitHooks\InstallCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\PostCheckoutCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\PostMergeCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\UninstallCommand;
+use Bitban\PhpCodeQualityTools\Configuration;
+use Bitban\PhpCodeQualityTools\ConfigurationLoader;
 use Symfony\Component\Console\Application as BaseApplication;
+use Symfony\Component\Yaml\Exception\ParseException;
 
 class Application extends BaseApplication
 {
     const APP_NAME = 'Bitban Technologies PHP Code Quality Tools';
-    const APP_VERSION = '0.9.10';
+    const APP_VERSION = '0.9.11';
+
+    const PROJECT_CONF_FILENAME = 'php-cqtools.conf.yml';
+
+    protected $configuration = null;
+    protected $customConfigurationFile = null;
 
     public function __construct()
     {
@@ -40,5 +48,53 @@ class Application extends BaseApplication
 
             new ShowValuesCommand()
         ]);
+
+        $this->configuration = ConfigurationLoader::loadFromFile(realpath(__DIR__ . '/../Resources/php-cqtools.conf.default.yml'));
+    }
+
+    /**
+     * Tries to load configuration from php-cqtools.yml. If not present, uses default configuration
+     *
+     * @param string $configFile
+     * @return Application
+     * @throws \Exception if file exists but has syntax errors
+     */
+    public function loadConfiguration($configFile)
+    {
+        try {
+            $this->configuration = ConfigurationLoader::loadFromFile($configFile);
+            $this->customConfigurationFile = $configFile;
+        } catch (ParseException $pe) {
+            // YAML parse error
+            throw new \Exception('Configuration syntax error in file ' . $configFile);
+        } catch (\Exception $e) {
+            // php-cqtooks.conf.yml file not found
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasCustomConfiguration()
+    {
+        return $this->customConfigurationFile !== null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCustomConfigurationFile()
+    {
+        return $this->customConfigurationFile;
+    }
+
+    /**
+     * @return Configuration
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
     }
 }

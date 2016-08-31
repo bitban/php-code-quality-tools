@@ -36,6 +36,7 @@ class FixCodeStyleCommand extends FilesetManipulationCommand
     {
         parent::execute($input, $output);
         $phpCodeStyleFixer = new PhpCodeStyleFixer($this->getPhpFiles(), $output);
+        $phpCodeStyleFixer->setRuleset($this->configuration->getCodestyleRuleset());
         if ($input->getOption(self::OPT_CUSTOM_RULESET) !== null) {
             $phpCodeStyleFixer->setRuleset($input->getOption(self::OPT_CUSTOM_RULESET));
         }

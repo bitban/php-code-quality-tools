@@ -1,0 +1,11 @@
+# PHP Code Quality Tools test configuration file
+---
+
+validations:
+  php_syntax: true
+  forbidden_keywords: false
+  variable_usage: true
+  codestyle: true
+  json_syntax: false
+  composer_files_commited_together: true
+codestyle_ruleset: "bitban-extended.xml"

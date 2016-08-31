@@ -27,7 +27,23 @@ class PhpCodeStyleValidator extends AbstractValidator
         $this->ruleset = realpath(__DIR__ . '/../../rulesets/bitban.xml');
     }
 
+    private function checkStandardId($standardId)
+    {
+        $binPath = (new Project())->getBinPath();
+        $process = $this->buildProcess("$binPath/phpcs -i");
+        $process->run();
+
+        $installedStandards = $process->getOutput();
+        $installedStandards = str_replace('The installed coding standards are', '', $installedStandards);
+        $installedStandards = str_replace('and', ',', $installedStandards);
+        $installedStandardsList = array_map('trim', explode(',', $installedStandards));
+
+        return in_array($standardId, $installedStandardsList);
+    }
+
     /**
+     * Checks if $ruleset is a file or an installed standard available for phpcs
+     *
      * @param string $ruleset
      * @return PhpCodeStyleValidator
      * @throws \Exception
@@ -35,7 +51,10 @@ class PhpCodeStyleValidator extends AbstractValidator
     public function setRuleset($ruleset)
     {
         if (realpath($ruleset)) {
+            // Custom ruleset in a file
             $this->ruleset = realpath($ruleset);
+        } elseif($this->checkStandardId($ruleset)) {
+            $this->ruleset = $ruleset;
         } else {
             throw new \Exception("Custom ruleset $ruleset not found");
         }
@@ -46,6 +65,11 @@ class PhpCodeStyleValidator extends AbstractValidator
     protected function getValidatorTitle()
     {
         return 'Validating PHP code style compliance';
+    }
+
+    public static function getDisabledText()
+    {
+        return 'PHP code style compliance validation disabled';
     }
 
     protected function check($file)

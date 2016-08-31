@@ -17,6 +17,11 @@ class PhpSyntaxValidator extends AbstractValidator
         return 'Validating PHP syntax';
     }
 
+    public static function getDisabledText()
+    {
+        return 'PHP syntax validation disabled';
+    }
+
     protected function check($file)
     {
         $process = new Process("php -l $file");

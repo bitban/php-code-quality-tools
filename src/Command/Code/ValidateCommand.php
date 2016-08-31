@@ -53,27 +53,65 @@ class ValidateCommand extends FilesetManipulationCommand
 
         $projectPath = $input->getArgument(self::ARG_PATH);
 
+        // Composer files
+
         if (true === $this->isProcessingAnyComposerFile()) {
-            if ($input->getOption(self::OPT_ONLY_COMMITED_FILES)) {
+
+            if ($input->getOption(self::OPT_ONLY_COMMITED_FILES) && $this->configuration->validateComposerFilesCommitedTogether()) {
                 $validators[] = new ComposerValidator($this->getComposerFiles(), $projectPath, $output);
+            } else {
+                $output->writeln('<info>' . ComposerValidator::getDisabledText() . '</info>');
             }
+
         }
+
+        // PHP files
 
         if (true === $this->isProcessingAnyPhpFile()) {
-            $validators[] = new PhpSyntaxValidator($this->getPhpFiles(), $projectPath, $output);
-            $validators[] = new PhpForbiddenKeywordsValidator($this->getPhpFiles(), $projectPath, $output);
 
-            $phpCodeStyleValidator = new PhpCodeStyleValidator($this->getPhpFiles(), $projectPath, $output);
-            if ($input->getOption(self::OPT_CUSTOM_RULESET) !== null) {
-                $phpCodeStyleValidator->setRuleset($input->getOption(self::OPT_CUSTOM_RULESET));
+            // Syntax validation
+            if ($this->configuration->validatePhpSyntax()) {
+                $validators[] = new PhpSyntaxValidator($this->getPhpFiles(), $projectPath, $output);
+            } else {
+                $output->writeln('<info>' . PhpSyntaxValidator::getDisabledText() . '</info>');
             }
-            $validators[] = $phpCodeStyleValidator;
 
-            $validators[] = new PhpSniffsValidator($this->getPhpFiles(), $projectPath, $output);
+            // Forbidden keywords validation
+            if ($this->configuration->validateForbiddenKeywords()) {
+                $validators[] = new PhpForbiddenKeywordsValidator($this->getPhpFiles(), $projectPath, $output);
+            } else {
+                $output->writeln('<info>' . PhpForbiddenKeywordsValidator::getDisabledText() . '</info>');
+            }
+
+            if ($this->configuration->validateCodestyle()) {
+                $phpCodeStyleValidator = new PhpCodeStyleValidator($this->getPhpFiles(), $projectPath, $output);
+                $phpCodeStyleValidator->setRuleset($this->configuration->getCodestyleRuleset());
+                if ($input->getOption(self::OPT_CUSTOM_RULESET) !== null) {
+                    $phpCodeStyleValidator->setRuleset($input->getOption(self::OPT_CUSTOM_RULESET));
+                }
+                $validators[] = $phpCodeStyleValidator;
+            } else {
+                $output->writeln('<info>' . PhpCodeStyleValidator::getDisabledText() . '</info>');
+            }
+
+            if ($this->configuration->validateVariableUsage()) {
+                $validators[] = new PhpSniffsValidator($this->getPhpFiles(), $projectPath, $output);
+            } else {
+                $output->writeln('<info>' . PhpSniffsValidator::getDisabledText() . '</info>');
+            }
+
         }
 
+        // JSON files
+
         if (true === $this->isProcessingAnyJsonFile()) {
-            $validators[] = new JsonValidator($this->getJsonFiles(), $projectPath, $output);
+
+            if ($this->configuration->validateJsonSyntax()) {
+                $validators[] = new JsonValidator($this->getJsonFiles(), $projectPath, $output);
+            } else {
+                $output->writeln('<info>' . JsonValidator::getDisabledText() . '</info>');
+            }
+
         }
 
         foreach ($validators as $validator) {

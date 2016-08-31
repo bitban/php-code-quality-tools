@@ -45,6 +45,11 @@ class ComposerValidator extends AbstractValidator
         return Constants::RETURN_CODE_OK;
     }
 
+    public static function getDisabledText()
+    {
+        return 'Composer files validation disabled';
+    }
+
     protected function check($file)
     {
         // No need to be implemented as validate() has been rewritten

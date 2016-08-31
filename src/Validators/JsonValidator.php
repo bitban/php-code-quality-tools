@@ -17,6 +17,11 @@ class JsonValidator extends AbstractValidator
         return 'Validating JSON syntax';
     }
 
+    public static function getDisabledText()
+    {
+        return 'JSON syntax validation disabled';
+    }
+
     protected function check($file)
     {
         $binPath = (new Project())->getBinPath();

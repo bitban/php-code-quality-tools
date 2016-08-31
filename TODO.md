@@ -28,8 +28,8 @@
 ## Further improvements
 
 * <del>validate given folder (appart from commited files)</del>
-* Add support for custom codestyles
-* Configure validations per project/on the fly
+* <del>Add support for custom codestyles</del>
+* <del>Configure validations per project/on the fly</del>
 * <del>Configure skippable paths</del>
 * improve and simplify installation procedure
 * refactor code
