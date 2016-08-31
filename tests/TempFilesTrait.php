@@ -17,10 +17,18 @@ trait TempFilesTrait
         exec("mkdir -p $this->tmpdir");
     }
 
-    private function writeTempFiles($files)
+    private function createTempDirectories($directories)
+    {
+        foreach ($directories as $directory) {
+            exec("mkdir -p $this->tmpdir/$directory");
+        }
+    }
+
+    private function writeTempFiles($files, $directory = '')
     {
         foreach ($files as $filename => $filecontent) {
-            file_put_contents($this->tmpdir . '/' . $filename, $filecontent);
+            $relativeDirectory = ($directory != '') ? $directory . '/' : '';
+            file_put_contents($this->tmpdir . '/' . $relativeDirectory . $filename, $filecontent);
         }
         return array_keys($files);
     }
