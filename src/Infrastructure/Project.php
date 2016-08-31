@@ -40,11 +40,17 @@ class Project
      *
      * @param string $path May be directory or file
      * @param string[] $excludedPaths
-     * @return string[]
+     * @return \string[]
+     * @throws \Exception
      */
     public function listFiles($path, $excludedPaths = [])
     {
         $realpath = realpath($path);
+
+        if (!$realpath) {
+            throw new \Exception('Path does not exist');
+        }
+
         $finder = new Finder();
         $finder
             ->files()

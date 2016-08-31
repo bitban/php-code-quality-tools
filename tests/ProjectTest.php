@@ -41,14 +41,14 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     public function testInvalidFile()
     {
         $this->setUpTempFiles();
-        $this->setExpectedException('InvalidArgumentException');
+        $this->setExpectedException('Exception', 'Path does not exist');
         $files = $this->project->listFiles($this->tmpdir . '/invalidFile.php');
     }
 
     public function testInvalidPath()
     {
         $this->setUpTempFiles();
-        $this->setExpectedException('InvalidArgumentException');
+        $this->setExpectedException('Exception', 'Path does not exist');
         $files = $this->project->listFiles($this->tmpdir . '/foo');
     }
 
