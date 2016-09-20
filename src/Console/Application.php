@@ -16,12 +16,13 @@ use Bitban\PhpCodeQualityTools\Command\GitHooks\InstallCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\PostCheckoutCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\PostMergeCommand;
 use Bitban\PhpCodeQualityTools\Command\GitHooks\UninstallCommand;
+use Bitban\PhpCodeQualityTools\Command\Test\RunCommand;
 use Symfony\Component\Console\Application as BaseApplication;
 
 class Application extends BaseApplication
 {
     const APP_NAME = 'Bitban Technologies PHP Code Quality Tools';
-    const APP_VERSION = '0.9.10';
+    const APP_VERSION = '0.9.11';
 
     public function __construct()
     {
@@ -38,7 +39,9 @@ class Application extends BaseApplication
             new ValidateCommand(),
             new CustomFixCommand(),
 
-            new ShowValuesCommand()
+            new ShowValuesCommand(),
+
+            new RunCommand()
         ]);
     }
 }

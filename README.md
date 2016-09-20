@@ -146,6 +146,18 @@ Shows debug information about:
 
 This command, may be unavailable in any future versions of these tools, as it has been added for debug purposes.
 
+## Run Bitban Lightweight tests
+
+Runs Bitban's framework lightweight tests. It assumes that Bitban's Development VM is up and running, and it has test launcher script `run_light_tests.sh` installed. 
+
+`bin/php-cqtools test:run --vmHost[=VMHOST] [<projectPath]`
+
+`projectPath` argument sets path to be processed. Default value is current project base path.
+
+`--vmHost=VMHOST` option sets Development VM hostname
+
+This command has no use for projects not integrating Bitban's framework.
+
 ## References
 
 Here are several interesting links with information (and inspiration) about this subject.
