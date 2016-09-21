@@ -16,7 +16,7 @@ class Constants
     const CHARACTER_PROGRESS_BAR = '<fg=green>=</fg=green>';
     const CHARACTER_BEER = "\xF0\x9F\x8D\xBA";
 
-    const WARNING_MESSAGE_WRAPPER = '<bg=yellow>%s</bg=yellow>';
+    const WARNING_MESSAGE_WRAPPER = '<bg=yellow;fg=black>%s</bg=yellow;fg=black>';
     const ERROR_MESSAGE_WRAPPER = '<bg=red>%s</bg=red>';
     
     const RETURN_CODE_OK = 0;
