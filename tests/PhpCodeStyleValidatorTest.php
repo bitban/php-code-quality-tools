@@ -63,4 +63,10 @@ class PhpCodeStyleValidatorTest extends \PHPUnit_Framework_TestCase
         $returnValue = $this->_testPhpSniffs(__DIR__ . '/testcases/code-style/BitbanCodeStyleError.php', $ruleset);
         $this->assertEquals(Constants::RETURN_CODE_ERROR, $returnValue, 'Custom codestyle file is missing but validator constructor did not throw any exception');
     }
+
+    public function testPhpCodeStyleTrailingLinesBeforePhpTag()
+    {
+        $returnValue = $this->_testPhpSniffs(__DIR__ . '/testcases/code-style/BitbanCodeStyleTrailingLinesBeforePhpTag.php');
+        $this->assertEquals(Constants::RETURN_CODE_WARNING, $returnValue, 'PHP file code style is wrong but validator did not return WARNING code');
+    }
 }
