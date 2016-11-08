@@ -14,7 +14,6 @@ use Bitban\PhpCodeQualityTools\Validators\JsonValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpCodeStyleValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpKeywordsValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpKeywordValidationRule;
-use Bitban\PhpCodeQualityTools\Validators\PhpMultibyteStringFunctionsValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpSniffsValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpSyntaxValidator;
 use Symfony\Component\Console\Input\InputInterface;
