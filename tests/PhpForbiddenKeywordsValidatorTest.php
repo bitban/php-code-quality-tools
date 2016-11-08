@@ -9,7 +9,8 @@ namespace Bitban\PhpCodeQualityTools\Tests;
 
 
 use Bitban\PhpCodeQualityTools\Constants;
-use Bitban\PhpCodeQualityTools\Validators\PhpForbiddenKeywordsValidator;
+use Bitban\PhpCodeQualityTools\Validators\PhpKeywordsValidator;
+use Bitban\PhpCodeQualityTools\Validators\PhpKeywordValidationRule;
 
 class PhpForbiddenKeywordsValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,8 +18,15 @@ class PhpForbiddenKeywordsValidatorTest extends \PHPUnit_Framework_TestCase
 
     private function _testPhpForbiddenKeywords($file)
     {
+        $phpKeywordValidationRules = [
+            // Forbidden kewyords
+            new PhpKeywordValidationRule(T_STRING, ['var_dump'], 'var_dump() function call found', Constants::RETURN_CODE_ERROR),
+            new PhpKeywordValidationRule(T_EMPTY, ['empty'], 'empty() operator found', Constants::RETURN_CODE_WARNING)
+        ];
+
         $outputInterface = new OutputInterfaceMock();
-        $validator = new PhpForbiddenKeywordsValidator([$file], $this->tmpdir, $outputInterface);
+        $validator = new PhpKeywordsValidator([$file], $this->tmpdir, $outputInterface);
+        $validator->setValidationRules($phpKeywordValidationRules);
         return $validator->validate();
     }
 

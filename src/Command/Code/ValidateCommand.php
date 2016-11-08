@@ -12,7 +12,8 @@ use Bitban\PhpCodeQualityTools\Constants;
 use Bitban\PhpCodeQualityTools\Validators\ComposerValidator;
 use Bitban\PhpCodeQualityTools\Validators\JsonValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpCodeStyleValidator;
-use Bitban\PhpCodeQualityTools\Validators\PhpForbiddenKeywordsValidator;
+use Bitban\PhpCodeQualityTools\Validators\PhpKeywordsValidator;
+use Bitban\PhpCodeQualityTools\Validators\PhpKeywordValidationRule;
 use Bitban\PhpCodeQualityTools\Validators\PhpMultibyteStringFunctionsValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpSniffsValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpSyntaxValidator;
@@ -61,9 +62,23 @@ class ValidateCommand extends FilesetManipulationCommand
         }
 
         if (true === $this->isProcessingAnyPhpFile()) {
+
+            $phpKeywordValidationRules = [
+                // Forbidden kewyords
+                new PhpKeywordValidationRule(T_STRING, ['var_dump'], 'var_dump() function call found', Constants::RETURN_CODE_ERROR),
+                new PhpKeywordValidationRule(T_EMPTY, ['empty'], 'empty() operator found', Constants::RETURN_CODE_WARNING),
+                // Not-multibyte keywords
+                new PhpKeywordValidationRule(
+                    T_STRING,
+                    ['ereg', 'eregi', 'eregi_replace', 'ereg_replace', 'mail', 'split', 'stripos', 'stristr', 'strlen', 'strpos', 'strrchr', 'strripos', 'strrpos', 'strstr', 'strtolower', 'strtoupper', 'substr', 'substr_count'],
+                    'Not multibyte string function found. Are you sure?',
+                    Constants::RETURN_CODE_WARNING
+                )
+            ];
+
             $validators[] = new PhpSyntaxValidator($this->getPhpFiles(), $projectPath, $output);
-            $validators[] = new PhpForbiddenKeywordsValidator($this->getPhpFiles(), $projectPath, $output);
-            $validators[] = new PhpMultibyteStringFunctionsValidator($this->getPhpFiles(), $projectPath, $output);
+            $validators[] = (new PhpKeywordsValidator($this->getPhpFiles(), $projectPath, $output))
+                ->setValidationRules($phpKeywordValidationRules);
 
             $phpCodeStyleValidator = new PhpCodeStyleValidator($this->getPhpFiles(), $projectPath, $output);
             if ($input->getOption(self::OPT_CUSTOM_RULESET) !== null) {

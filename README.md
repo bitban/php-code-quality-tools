@@ -111,6 +111,7 @@ It performs several tasks:
 * PHP files:
   * Check for syntax errors
   * Check that forbidden functions (i.e., var_dump(), empty()) are not commited
+  * Check whether multibyte string functions are being used
   * Check that code complies defined code style recommendations (errors cannot be commited, warnings may be)
   * Check that variable usage is right (i.e., use undefined variables, parameters not used, etc.)
 * JSON files:
