@@ -28,6 +28,12 @@ class JsonValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Constants::RETURN_CODE_OK, $returnValue, 'JSON file syntax is right but validator did not return OK code');
     }
 
+    public function testJsonEmpty()
+    {
+        $returnValue = $this->_testJsonSyntax(__DIR__ . '/testcases/syntax/JsonEmpty.json');
+        $this->assertEquals(Constants::RETURN_CODE_WARNING, $returnValue, 'JSON file is empty but validator did not return WARNING code');
+    }
+
     public function testJsonSyntaxError()
     {
         $testFiles = [
