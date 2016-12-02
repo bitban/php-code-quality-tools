@@ -45,9 +45,9 @@ class PhpKeywordsValidator extends AbstractValidator
     {
         $sourceCode = file_get_contents($file);
         $tokens = token_get_all($sourceCode);
-        array_map(function ($token) use ($validationRule, $file) {
+        foreach ($tokens as $token) {
             $validationRule->validateToken($file, $token);
-        }, $tokens);
+        }
     }
 
     protected function check($file)
