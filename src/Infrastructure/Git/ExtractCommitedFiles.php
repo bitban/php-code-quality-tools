@@ -17,6 +17,11 @@ class ExtractCommitedFiles
     /** @var string[] */
     private $excludedPaths = [];
 
+    // @TODO move this hardcoded list
+    private $excludedFiles = [
+        ".phpstorm.meta.php"
+    ];
+
     private function execute()
     {
         exec('git rev-parse --verify HEAD 2> /dev/null', $discardOutput, $this->rc); // Store output in $discardOutput as it will be discarded
@@ -46,15 +51,21 @@ class ExtractCommitedFiles
     {
         $this->execute();
 
-        // Excluded paths
         $excludedPaths = $this->excludedPaths;
-        $files = array_filter($this->output, function ($item) use ($excludedPaths) {
+        $excludedFiles = $this->excludedFiles;
+        $files = array_filter($this->output, function ($item) use ($excludedPaths, $excludedFiles) {
+            // Excluded paths
             foreach ($excludedPaths as $excludedPath) {
                 $excludedPath = rtrim($excludedPath, '/');
                 if (preg_match("#^$excludedPath\/#", $item)) {
                     return false;
                 }
             }
+            // Excluded files
+            if (in_array(basename($item), $excludedFiles)) {
+                return false;
+            }
+
             return true;
         });
 

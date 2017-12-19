@@ -30,11 +30,13 @@ touch $tmpdir/dir1/file2
 touch $tmpdir/dir2/file3
 touch $tmpdir/dir2/file4
 touch $tmpdir/dir3/file5
+touch $tmpdir/.phpstorm.meta.php
 git add $tmpdir/dir1/file1
 git add $tmpdir/dir1/file2
 git add $tmpdir/dir2/file3
 git add $tmpdir/dir2/file4
 git add $tmpdir/dir3/file5
+git add $tmpdir/.phpstorm.meta.php
 
 COMMAND;
         exec($script);
@@ -48,5 +50,6 @@ COMMAND;
         $this->assertFalse(in_array('dir2/file3', $files));
         $this->assertFalse(in_array('dir2/file4', $files));
         $this->assertTrue(in_array('dir3/file5', $files));
+        $this->assertFalse(in_array(".phpstorm.meta.php", $files));
     }
 }

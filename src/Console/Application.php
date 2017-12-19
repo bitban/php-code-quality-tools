@@ -22,7 +22,7 @@ use Symfony\Component\Console\Application as BaseApplication;
 class Application extends BaseApplication
 {
     const APP_NAME = 'Bitban Technologies PHP Code Quality Tools';
-    const APP_VERSION = '0.9.15';
+    const APP_VERSION = '0.9.16';
 
     public function __construct()
     {

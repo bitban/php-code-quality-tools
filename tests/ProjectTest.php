@@ -34,6 +34,9 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
                 'file8.php' => '',
                 'file9.php' => ''
             ], 'dir3/dir4');
+        $this->writeTempFiles([
+            ".phpstorm.meta.php" => ""
+        ], "");
 
         $this->project = new Project($this->tmpdir);
     }
@@ -71,6 +74,9 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
         $this->assertContains(realpath($this->tmpdir . '/dir1/file2.php'), $files, 'dir1/file2.php should be returned but it is not');
         $this->assertContains(realpath($this->tmpdir . '/dir1/file3.php'), $files, 'dir1/file3.php should be returned but it is not');
         $this->assertNotContains(realpath($this->tmpdir . '/dir1/file4.txt'), $files, 'dir1/file4.txt should not be returned but it is');
+
+        $files = $this->project->listFiles($this->tmpdir);
+        $this->assertNotContains(realpath($this->tmpdir . '/.phpstorm.meta.php'), $files, '.phpstorm.meta.php should not be returned but it is');
     }
 
     public function testListFilesWithExclusions()
