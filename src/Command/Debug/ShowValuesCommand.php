@@ -40,7 +40,7 @@ class ShowValuesCommand extends FilesetManipulationCommand
     private function prefixFiles($files, $showFullPath)
     {
         $prefix = $showFullPath ? $this->projectBasepath . '/' : '';
-        return array_map(function($item) use ($prefix) {
+        return array_map(function ($item) use ($prefix) {
             return $prefix . $item;
         }, $files);
     }

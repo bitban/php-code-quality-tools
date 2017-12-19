@@ -7,7 +7,6 @@
 
 namespace Bitban\PhpCodeQualityTools\Fixers;
 
-
 use Bitban\PhpCodeQualityTools\Interfaces\FixerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
@@ -45,7 +44,7 @@ class PhpCustomFixer implements FixerInterface
         foreach ($fixers as $fixerKey => $lines) {
             $fixer = $this->fixers[$fixerKey];
             foreach ($lines as $line) {
-                $sourceFile[$line] = preg_replace($fixer['patch']['pattern'], $fixer['patch']['replacement'], $sourceFile[$line] );
+                $sourceFile[$line] = preg_replace($fixer['patch']['pattern'], $fixer['patch']['replacement'], $sourceFile[$line]);
             }
         }
         return join('', $sourceFile);
@@ -64,8 +63,12 @@ class PhpCustomFixer implements FixerInterface
             if ($process->getOutput() == '') {
                 continue;
             }
-            $linesWithErrors = array_map(function($item) { return $item - 1; }, preg_split ('/\R/', $process->getOutput()));
-            $linesWithErrors = array_filter($linesWithErrors, function($item) { return $item >= 0; });
+            $linesWithErrors = array_map(function ($item) {
+                return $item - 1;
+            }, preg_split('/\R/', $process->getOutput()));
+            $linesWithErrors = array_filter($linesWithErrors, function ($item) {
+                return $item >= 0;
+            });
             if (count($linesWithErrors) > 0) {
                 $fixers[$fixerKey] = $linesWithErrors;
             }

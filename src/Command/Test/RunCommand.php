@@ -71,7 +71,7 @@ class RunCommand extends BaseCommand
     {
         $processExitCode = $process->getExitCode();
         if ($processExitCode > 0) {
-            if (strpos($process->getErrorOutput(), 'bash') !== false) {
+            if (mb_strpos($process->getErrorOutput(), 'bash') !== false) {
                 $output->writeln('<error>run_light_tests.sh script not found, could not perform any test</error>');
             } else {
                 $output->writeln($process->getOutput());
