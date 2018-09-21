@@ -1,17 +1,16 @@
 <?php
-
 /**
- * Copyright 2016 Bitban Technologies, S.L.
+ * Copyright 2016-2018 Bitban Technologies, S.L.
  * Todos los derechos reservados.
  */
 
 namespace Bitban\PhpCodeQualityTools\Tests;
 
-
 use Bitban\PhpCodeQualityTools\Constants;
 use Bitban\PhpCodeQualityTools\Validators\JsonValidator;
+use PHPUnit\Framework\TestCase;
 
-class JsonValidatorTest extends \PHPUnit_Framework_TestCase
+class JsonValidatorTest extends TestCase
 {
     use TempFilesTrait;
 

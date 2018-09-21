@@ -1,15 +1,15 @@
 <?php
-
 /**
- * Copyright 2016 Bitban Technologies, S.L.
+ * Copyright 2016-2018 Bitban Technologies, S.L.
  * Todos los derechos reservados.
  */
 
 namespace Bitban\PhpCodeQualityTools\Tests;
 
 use Bitban\PhpCodeQualityTools\Infrastructure\Project;
+use PHPUnit\Framework\TestCase;
 
-class ProjectTest extends \PHPUnit_Framework_TestCase
+class ProjectTest extends TestCase
 {
     use TempFilesTrait;
 
@@ -44,14 +44,16 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     public function testInvalidFile()
     {
         $this->setUpTempFiles();
-        $this->setExpectedException('Exception', 'Path does not exist');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Path does not exist");
         $files = $this->project->listFiles($this->tmpdir . '/invalidFile.php');
     }
 
     public function testInvalidPath()
     {
         $this->setUpTempFiles();
-        $this->setExpectedException('Exception', 'Path does not exist');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Path does not exist");
         $files = $this->project->listFiles($this->tmpdir . '/foo');
     }
 

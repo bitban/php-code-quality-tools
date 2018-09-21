@@ -1,18 +1,17 @@
 <?php
-
 /**
- * Copyright 2016 Bitban Technologies, S.L.
+ * Copyright 2016-2018 Bitban Technologies, S.L.
  * Todos los derechos reservados.
  */
 
 namespace Bitban\PhpCodeQualityTools\Tests;
 
-
 use Bitban\PhpCodeQualityTools\Constants;
 use Bitban\PhpCodeQualityTools\Validators\PhpKeywordsValidator;
 use Bitban\PhpCodeQualityTools\Validators\PhpKeywordValidationRule;
+use PHPUnit\Framework\TestCase;
 
-class PhpForbiddenKeywordsValidatorTest extends \PHPUnit_Framework_TestCase
+class PhpForbiddenKeywordsValidatorTest extends TestCase
 {
     use TempFilesTrait;
 

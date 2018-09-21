@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Copyright 2016 Bitban Technologies, S.L.
+ * Copyright 2016-2018 Bitban Technologies, S.L.
  * Todos los derechos reservados.
  */
 
@@ -11,9 +10,9 @@ use Bitban\PhpCodeQualityTools\Infrastructure\Git\GitHelper;
 use Bitban\PhpCodeQualityTools\Infrastructure\Git\HookManager;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class HookManagerTest extends PHPUnit_Framework_TestCase
+class HookManagerTest extends TestCase
 {
     /** @var vfsStreamDirectory */
     private $basePath;
@@ -43,10 +42,12 @@ class HookManagerTest extends PHPUnit_Framework_TestCase
             'bar'
         );
 
-        $this->setExpectedException('Exception', '', HookManager::BAD_PROJECT_PATH_EXCEPTION_CODE);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionCode(HookManager::BAD_PROJECT_PATH_EXCEPTION_CODE);
         $hookManager = new HookManager('foo', 'bar', 'baz');
 
-        $this->setExpectedException('Exception', '', HookManager::BAD_HOOKS_SOURCE_PATH_EXCEPTION_CODE);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionCode(HookManager::BAD_HOOKS_SOURCE_PATH_EXCEPTION_CODE);
         $hookManager = new HookManager($this->basePath->getChild('project')->url(), 'foo', 'bar');
     }
 
@@ -138,7 +139,8 @@ class HookManagerTest extends PHPUnit_Framework_TestCase
             'foo'
         );
 
-        $this->setExpectedException('Exception', '', HookManager::BAD_HOOKS_DESTINATION_PATH_EXCEPTION_CODE);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionCode(HookManager::BAD_HOOKS_DESTINATION_PATH_EXCEPTION_CODE);
 
         $hookManager->checkHooks();
     }
