@@ -24,7 +24,7 @@
     "psr-4": { "Bitban\\PhpCodeQualityTools\\Tests\\": "tests/" }
   },
   "require": {
-    "composer/composer": "^1.1",
+    "composer/composer": "^1.10.22",
     "symfony/process": "^2.8||^3.1|^4.1",
     "squizlabs/php_codesniffer": "^2.6"
   },
